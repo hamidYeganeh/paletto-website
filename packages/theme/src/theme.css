@@ -1,28 +1,19 @@
 @theme {
-  --font-sans: "Geist Sans", "Inter", "system-ui", "sans-serif";
-  --font-mono: "Geist Mono", "SFMono-Regular", "Menlo", "monospace";
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-primary-950: var(--primary-950);
 
-  --color-background: hsl(0 0% 100%);
-  --color-foreground: hsl(0 0% 9%);
-  --color-muted: hsl(0 0% 96%);
-  --color-muted-foreground: hsl(0 0% 45%);
-  --color-primary: hsl(0 0% 9%);
-  --color-primary-foreground: hsl(0 0% 100%);
-  --color-secondary: hsl(0 0% 92%);
-  --color-secondary-foreground: hsl(0 0% 21%);
-
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 1rem;
-}
-
-@theme dark {
-  --color-background: hsl(240 10% 6%);
-  --color-foreground: hsl(0 0% 95%);
-  --color-muted: hsl(240 3.7% 15.9%);
-  --color-muted-foreground: hsl(240 5% 65%);
-  --color-primary: hsl(0 0% 95%);
-  --color-primary-foreground: hsl(240 5.9% 10%);
-  --color-secondary: hsl(240 3.7% 15.9%);
-  --color-secondary-foreground: hsl(0 0% 95%);
+  --radius-theme-xs: 10px;
+  --radius-theme-sm: 10px;
+  --radius-theme-md: 12px;
+  --radius-theme-lg: 10px;
+  --radius-theme-xl: 10px;
 }

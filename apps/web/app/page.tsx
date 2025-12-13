@@ -1,27 +1,30 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
-
-type Props = Omit<ImageProps, "src"> & {
-  srcLight: string;
-  srcDark: string;
-};
-
-const ThemeImage = (props: Props) => {
-  const { srcLight, srcDark, ...rest } = props;
-
-  return (
-    <>
-      <Image {...rest} src={srcLight} className="imgLight" />
-      <Image {...rest} src={srcDark} className="imgDark" />
-    </>
-  );
-};
+import Button from "@repo/ui/Button";
+import { cn } from "@repo/utils";
 
 export default function Home() {
   return (
-    <div>
-      <div className="size-48 bg-primary"></div>
-    </div>
+    <main
+      className={cn(
+        "flex min-h-screen flex-col items-center justify-center gap-6 "
+      )}
+    >
+      <div className="space-y-2 text-center">
+        <p className="text-sm uppercase tracking-[0.2em]">Components</p>
+        <h1 className="text-3xl font-semibold">Shared UI Showcase</h1>
+        <p className="text-base">
+          Buttons inherit tokens from the shared theme and merge class names
+          with ease.
+        </p>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-center gap-4">
+        <Button variant={"outlined"} className="w-full" size={"xl"}>
+          Contained
+        </Button>
+        <Button color={"primary"} variant={"outlined"} className="w-full">
+          Outlined
+        </Button>
+      </div>
+    </main>
   );
 }
