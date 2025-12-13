@@ -63,7 +63,7 @@ export default function Home() {
             Read our docs
           </a>
         </div>
-        <Button variant="secondary" className={styles.secondary}>
+        <Button variant="outlined" className={styles.secondary}>
           Read more
         </Button>
       </main>

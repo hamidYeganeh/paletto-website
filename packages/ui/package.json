@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./*": "./src/*/*.tsx"
+    ".": "./src/index.ts",
+    "./Button": "./src/Button/index.ts",
+    "./Checkbox": "./src/Checkbox/index.ts",
+    "./Skeleton": "./src/Skeleton/index.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

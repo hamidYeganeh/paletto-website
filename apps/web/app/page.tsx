@@ -1,5 +1,9 @@
 import Button from "@repo/ui/Button";
 import Skeleton from "@repo/ui/Skeleton";
+import Checkbox, {
+  CheckboxControl,
+  CheckboxIndicator,
+} from "@repo/ui/Checkbox";
 import { cn } from "@repo/utils";
 
 export default function Home() {
@@ -27,6 +31,13 @@ export default function Home() {
         </Button>
 
         <Skeleton className="size-52" />
+
+        <Checkbox id="checkbox" variant={'default'} color={'primary'} size={'xl'}>
+          <CheckboxControl>
+            <CheckboxIndicator />
+          </CheckboxControl>
+        </Checkbox>
+        <label htmlFor="checkbox">Checkbox</label>
       </div>
     </main>
   );

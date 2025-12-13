@@ -1,17 +1,43 @@
 import { cn, cva, type VariantProps } from "@repo/utils";
 
-export const ButtonBaseStyles = cva(
+/* -----------------------------------------------------------------------------
+ * Base
+ * -------------------------------------------------------------------------- */
+
+const ButtonBaseStyles = cva(
   cn(
-    "inline-flex items-center justify-center gap-2 rounded-theme-md transition-colors outline-none relative overflow-hidden duration-200"
+    // Layout
+    "inline-flex items-center justify-center gap-2",
+    "relative overflow-hidden rounded-theme-md outline-none",
+
+    // Motion
+    "transition-colors duration-200"
   ),
   {
     variants: {
+      /* ---------------------------------------------------------------------
+       * Visual Variant
+       * ------------------------------------------------------------------ */
+
       variant: {
-        contained:
-          "bg-(--main-color) text-(--text-color) hover:bg-(--dark-color)",
-        outlined:
-          "bg-transparent ring ring-(--main-color) text-(--main-color) hover:bg-(--lighter-color)",
+        contained: cn(
+          "bg-(--main-color)",
+          "text-(--text-color)",
+          "hover:bg-(--dark-color)"
+        ),
+
+        outlined: cn(
+          "bg-transparent",
+          "ring ring-(--main-color)",
+          "text-(--main-color)",
+          "hover:bg-(--lighter-color)"
+        ),
       },
+
+      /* ---------------------------------------------------------------------
+       * Color Tokens
+       * ------------------------------------------------------------------ */
+
       color: {
         primary: cn(
           "[--lighter-color:theme(colors.primary.50)]",
@@ -22,6 +48,11 @@ export const ButtonBaseStyles = cva(
           "[--text-color:theme(colors.primary.50)]"
         ),
       },
+
+      /* ---------------------------------------------------------------------
+       * Size
+       * ------------------------------------------------------------------ */
+
       size: {
         xs: "h-6 px-1 text-xs",
         sm: "h-8 px-3 text-xs",
@@ -29,24 +60,35 @@ export const ButtonBaseStyles = cva(
         lg: "h-12 px-6 text-base",
         xl: "h-14 px-8 text-lg",
       },
+
+      /* ---------------------------------------------------------------------
+       * State
+       * ------------------------------------------------------------------ */
+
       isPending: {
         true: "opacity-70 pointer-events-none",
         false: "",
       },
+
       isDisabled: {
         true: "opacity-70 pointer-events-none",
         false: "",
       },
     },
+
     defaultVariants: {
       variant: "contained",
       color: "primary",
       size: "md",
-      isDisabled: false,
       isPending: false,
+      isDisabled: false,
     },
   }
 );
+
+/* -----------------------------------------------------------------------------
+ * Public API
+ * -------------------------------------------------------------------------- */
 
 export const ButtonStyles = {
   base: ButtonBaseStyles,
