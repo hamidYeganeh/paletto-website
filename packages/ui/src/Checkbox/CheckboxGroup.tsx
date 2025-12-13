@@ -33,7 +33,7 @@ const CheckboxGroup: FC<CheckboxGroupProps> = (props) => {
       className={cn(CheckboxGroupStyles.base({ orientation, size }), className)}
       {...otherProps}
     >
-      <CheckboxGroupContext value={{ variant, size, color }}>
+      <CheckboxGroupContext.Provider value={{ variant, size, color }}>
         {label ? (
           <Label data-slot="label">
             {label}
@@ -62,7 +62,7 @@ const CheckboxGroup: FC<CheckboxGroupProps> = (props) => {
             ? (v) => errorMessage({ validationErrors: v.validationErrors })
             : errorMessage}
         </FieldError>
-      </CheckboxGroupContext>
+      </CheckboxGroupContext.Provider>
     </BaseCheckboxGroup>
   );
 };

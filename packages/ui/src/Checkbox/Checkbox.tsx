@@ -38,9 +38,9 @@ const Checkbox: FC<CheckboxProps> = (props) => {
       {...otherProps}
     >
       {(values) => (
-        <CheckboxContext value={{ state: values, variant, size, color }}>
+        <CheckboxContext.Provider value={{ state: values, variant, size, color }}>
           {typeof children === "function" ? children(values) : children}
-        </CheckboxContext>
+        </CheckboxContext.Provider>
       )}
     </BaseCheckbox>
   );

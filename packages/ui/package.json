@@ -7,6 +7,7 @@
     "./Button": "./src/Button/index.ts",
     "./Checkbox": "./src/Checkbox/index.ts",
     "./Label": "./src/Label/index.ts",
+    "./Modal": "./src/Modal/index.ts",
     "./Skeleton": "./src/Skeleton/index.ts",
     "./Text": "./src/Text/index.ts"
   },

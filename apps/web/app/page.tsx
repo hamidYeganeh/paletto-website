@@ -4,6 +4,17 @@ import Checkbox, {
   CheckboxControl,
   CheckboxIndicator,
 } from "@repo/ui/Checkbox";
+import {
+  ModalBody,
+  ModalCloseTrigger,
+  ModalContainer,
+  ModalDialog,
+  ModalFooter,
+  ModalHeading,
+  ModalHeader,
+  ModalRoot,
+  ModalTrigger,
+} from "@repo/ui";
 import { cn } from "@repo/utils";
 
 export default function Home() {
@@ -32,12 +43,38 @@ export default function Home() {
 
         <Skeleton className="size-52" />
 
-        <Checkbox id="checkbox" variant={'default'} color={'primary'} size={'xl'}>
+        <Checkbox id="checkbox" variant={"default"} color={"primary"} size={"xl"}>
           <CheckboxControl>
             <CheckboxIndicator />
           </CheckboxControl>
         </Checkbox>
         <label htmlFor="checkbox">Checkbox</label>
+
+        <ModalRoot>
+          <ModalTrigger className="rounded-theme-md bg-(--main-color) px-4 py-2 text-(--text-color)">
+            Open Modal
+          </ModalTrigger>
+          <ModalContainer variant="blur" placement="auto">
+            <ModalDialog>
+              <ModalCloseTrigger
+                aria-label="Close modal"
+                className="rounded-theme-md bg-black/10 p-2 text-[var(--color-foreground)]"
+              />
+              <ModalHeader>
+                <ModalHeading>Modal Test</ModalHeading>
+              </ModalHeader>
+              <ModalBody>
+                This is a quick demo to verify `@repo/ui/Modal` renders and
+                closes correctly.
+              </ModalBody>
+              <ModalFooter>
+                <ModalCloseTrigger className="rounded-theme-md bg-black/10 px-3 py-2">
+                  Close
+                </ModalCloseTrigger>
+              </ModalFooter>
+            </ModalDialog>
+          </ModalContainer>
+        </ModalRoot>
       </div>
     </main>
   );

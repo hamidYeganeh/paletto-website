@@ -15,6 +15,34 @@ export { default as Label } from "./Label";
 export type { LabelProps } from "./Label/LabelTypes";
 export { LabelStyles } from "./Label/LabelStyles";
 
+export {
+  default as ModalRoot,
+  ModalBody,
+  ModalCloseTrigger,
+  ModalContainer,
+  ModalDialog,
+  ModalFooter,
+  ModalHeading,
+  ModalHeader,
+  ModalIcon,
+  ModalTrigger,
+} from "./Modal";
+export type { ModalVariantProps } from "./Modal/ModalStyles";
+export type {
+  ModalBodyProps,
+  ModalCloseTriggerProps,
+  ModalContainerProps,
+  ModalDialogProps,
+  ModalFooterProps,
+  ModalHeadingProps,
+  ModalHeaderProps,
+  ModalIconProps,
+  ModalPlacement,
+  ModalRootProps,
+  ModalTriggerProps,
+} from "./Modal/ModalTypes";
+export { ModalStyles } from "./Modal/ModalStyles";
+
 export { default as Skeleton } from "./Skeleton";
 export type { SkeletonProps } from "./Skeleton/SkeletonTypes";
 export { SkeletonStyles } from "./Skeleton/SkeletonStyles";
