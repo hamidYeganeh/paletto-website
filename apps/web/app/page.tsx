@@ -1,4 +1,5 @@
 import Button from "@repo/ui/Button";
+import Skeleton from "@repo/ui/Skeleton";
 import { cn } from "@repo/utils";
 
 export default function Home() {
@@ -18,12 +19,14 @@ export default function Home() {
       </div>
 
       <div className="flex flex-wrap items-center justify-center gap-4">
-        <Button variant={"outlined"} className="w-full" size={"xl"}>
+        <Button variant={"contained"} className="w-full" size={"xl"}>
           Contained
         </Button>
         <Button color={"primary"} variant={"outlined"} className="w-full">
           Outlined
         </Button>
+
+        <Skeleton className="size-52" />
       </div>
     </main>
   );

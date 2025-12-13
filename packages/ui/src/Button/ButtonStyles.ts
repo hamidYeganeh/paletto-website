@@ -2,7 +2,7 @@ import { cn, cva, type VariantProps } from "@repo/utils";
 
 export const ButtonBaseStyles = cva(
   cn(
-    "inline-flex items-center justify-center gap-2 rounded-theme-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-[var(--color-background)] disabled:pointer-events-none disabled:opacity-50"
+    "inline-flex items-center justify-center gap-2 rounded-theme-md transition-colors outline-none relative overflow-hidden duration-200"
   ),
   {
     variants: {
@@ -29,15 +29,27 @@ export const ButtonBaseStyles = cva(
         lg: "h-12 px-6 text-base",
         xl: "h-14 px-8 text-lg",
       },
+      isPending: {
+        true: "opacity-70 pointer-events-none",
+        false: "",
+      },
+      isDisabled: {
+        true: "opacity-70 pointer-events-none",
+        false: "",
+      },
     },
     defaultVariants: {
       variant: "contained",
       color: "primary",
       size: "md",
+      isDisabled: false,
+      isPending: false,
     },
   }
 );
+
 export const ButtonStyles = {
   base: ButtonBaseStyles,
 };
+
 export type ButtonVariantProps = VariantProps<typeof ButtonStyles.base>;

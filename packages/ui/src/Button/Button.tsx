@@ -1,9 +1,11 @@
 "use client";
 
-import { forwardRef } from "react";
+import { forwardRef, type MouseEvent } from "react";
 import { cn } from "@repo/utils";
 import { ButtonStyles } from "./ButtonStyles";
 import type { ButtonProps } from "./ButtonTypes";
+import { Button as BaseButton } from "react-aria-components";
+import { useRipple } from "@repo/hooks/useRipple";
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
   const {
@@ -11,22 +13,45 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     variant,
     color,
     size,
-    type = "button",
+    type,
+    children,
+    isPending,
+    isDisabled,
+    onClick,
+    disabledRipples,
     ...otherProps
   } = props;
 
+  const { createRipple } = useRipple();
+
   const ButtonClassnames = cn(
-    ButtonStyles.base({ variant, color, size }),
+    ButtonStyles.base({ variant, color, size, isPending, isDisabled }),
     className
   );
 
+  function handleClick(event: MouseEvent<HTMLButtonElement>) {
+    if (!disabledRipples) {
+      createRipple(event);
+    }
+
+    if (onClick) {
+      onClick(event);
+    }
+  }
+
   return (
-    <button
-      ref={ref}
-      type={type}
+    <BaseButton
+      data-slot="button"
+      type={type ?? "button"}
+      isPending={isPending ?? false}
+      onClick={(event) => {
+        handleClick(event as MouseEvent<HTMLButtonElement>);
+      }}
       className={ButtonClassnames}
       {...otherProps}
-    />
+    >
+      {children}
+    </BaseButton>
   );
 });
 
