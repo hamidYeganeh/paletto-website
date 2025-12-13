@@ -1,4 +1,7 @@
-import en from "./messages/en.json";
+import enCommon from "./messages/en/Common.json";
+import enHome from "./messages/en/Home.json";
 
-export type Messages = typeof en;
-
+export type Messages = {
+  Common: typeof enCommon;
+  Home: typeof enHome;
+};

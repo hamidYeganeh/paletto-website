@@ -20,6 +20,9 @@ import { cookies, headers } from "next/headers";
 import type { Locale } from "@repo/i18n/config";
 import { resolveLocale } from "@repo/i18n/utils";
 import I18nDemo from "./I18nDemo";
+import ApiDemo from "./ApiDemo";
+import { endpoints } from "@repo/api";
+import type { User } from "@repo/api";
 
 export default async function Home() {
   const cookieStore = await cookies();
@@ -30,6 +33,17 @@ export default async function Home() {
     acceptLanguage: headerStore.get("accept-language"),
   });
 
+  const proto = headerStore.get("x-forwarded-proto") ?? "http";
+  const host =
+    headerStore.get("x-forwarded-host") ?? headerStore.get("host") ?? "";
+
+  const initialUsers: User[] =
+    host.length > 0
+      ? await fetch(`${proto}://${host}${endpoints.users.list()}`, {
+          cache: "no-store",
+        }).then((r) => r.json())
+      : [];
+
   return (
     <main
       className={cn(
@@ -37,6 +51,7 @@ export default async function Home() {
       )}
     >
       <I18nDemo locale={locale} />
+      <ApiDemo initialUsers={initialUsers} />
 
       <div className="flex flex-wrap items-center justify-center gap-4">
         <Button variant={"contained"} className="w-full" size={"xl"}>
