@@ -65,7 +65,12 @@ export default async function Home() {
 
         <Skeleton className="size-52" />
 
-        <Checkbox id="checkbox" variant={"default"} color={"primary"} size={"xl"}>
+        <Checkbox
+          id="checkbox"
+          variant={"default"}
+          color={"primary"}
+          size={"xl"}
+        >
           <CheckboxControl>
             <CheckboxIndicator />
           </CheckboxControl>

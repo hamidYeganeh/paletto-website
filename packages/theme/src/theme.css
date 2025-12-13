@@ -1,4 +1,4 @@
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark *, [data-theme$="-dark"] *));
 
 :root {
   --main-color: var(--primary-500);
@@ -15,7 +15,7 @@
   --color-background: oklch(0.12 0 0);
   --color-foreground: oklch(0.96 0 0);
   --color-surface: oklch(0.16 0 0);
-  --color-muted: oklch(0.70 0 0);
+  --color-muted: oklch(0.7 0 0);
   --color-border: color-mix(in oklab, var(--color-foreground) 14%, transparent);
 }
 
