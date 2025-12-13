@@ -16,22 +16,27 @@ import {
   ModalTrigger,
 } from "@repo/ui";
 import { cn } from "@repo/utils";
+import { cookies, headers } from "next/headers";
+import type { Locale } from "@repo/i18n/config";
+import { resolveLocale } from "@repo/i18n/utils";
+import I18nDemo from "./I18nDemo";
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies();
+  const headerStore = await headers();
+  const locale: Locale = resolveLocale({
+    locale:
+      cookieStore.get("NEXT_LOCALE")?.value ?? cookieStore.get("locale")?.value,
+    acceptLanguage: headerStore.get("accept-language"),
+  });
+
   return (
     <main
       className={cn(
         "flex min-h-screen flex-col items-center justify-center gap-6 "
       )}
     >
-      <div className="space-y-2 text-center">
-        <p className="text-sm uppercase tracking-[0.2em]">Components</p>
-        <h1 className="text-3xl font-semibold">Shared UI Showcase</h1>
-        <p className="text-base">
-          Buttons inherit tokens from the shared theme and merge class names
-          with ease.
-        </p>
-      </div>
+      <I18nDemo locale={locale} />
 
       <div className="flex flex-wrap items-center justify-center gap-4">
         <Button variant={"contained"} className="w-full" size={"xl"}>

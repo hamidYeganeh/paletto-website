@@ -1,0 +1,12 @@
+{
+  "Common": {
+    "language": "Langue",
+    "english": "Anglais",
+    "french": "Français"
+  },
+  "Home": {
+    "title": "Vitrine UI partagée",
+    "subtitle": "Ce texte est traduit via next-intl depuis @repo/i18n."
+  }
+}
+

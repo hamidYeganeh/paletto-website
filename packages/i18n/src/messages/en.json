@@ -1,0 +1,12 @@
+{
+  "Common": {
+    "language": "Language",
+    "english": "English",
+    "french": "French"
+  },
+  "Home": {
+    "title": "Shared UI Showcase",
+    "subtitle": "This text is translated via next-intl from @repo/i18n."
+  }
+}
+
