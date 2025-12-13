@@ -23,6 +23,7 @@ import I18nDemo from "./I18nDemo";
 import ApiDemo from "./ApiDemo";
 import { endpoints } from "@repo/api";
 import type { User } from "@repo/api";
+import ThemeControls from "./ThemeControls";
 
 export default async function Home() {
   const cookieStore = await cookies();
@@ -51,6 +52,7 @@ export default async function Home() {
       )}
     >
       <I18nDemo locale={locale} />
+      <ThemeControls />
       <ApiDemo initialUsers={initialUsers} />
 
       <div className="flex flex-wrap items-center justify-center gap-4">

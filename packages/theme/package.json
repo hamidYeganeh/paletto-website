@@ -2,13 +2,35 @@
   "name": "@repo/theme",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "files": [
     "src"
   ],
   "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./ThemeProvider": {
+      "types": "./src/ThemeProvider.tsx",
+      "import": "./src/ThemeProvider.tsx"
+    },
     "./theme.css": "./src/theme.css"
   },
   "sideEffects": [
     "./src/theme.css"
-  ]
+  ],
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next-themes": "^0.4.6"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "typescript": "5.9.2"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
 }

@@ -5,13 +5,13 @@
 @source "../../../packages/**/*.{ts,tsx,js,jsx,mdx}";
 
 :root {
-  --primary-50:  oklch(0.975 0.003 247.9);
-  --primary-100: oklch(0.851 0.018 240.0);
+  --primary-50: oklch(0.975 0.003 247.9);
+  --primary-100: oklch(0.851 0.018 240);
   --primary-200: oklch(0.722 0.035 238.4);
-  --primary-300: oklch(0.590 0.051 239.1);
+  --primary-300: oklch(0.59 0.051 239.1);
   --primary-400: oklch(0.464 0.063 239.6);
   --primary-500: oklch(0.422 0.056 238.8);
-  --primary-600: oklch(0.380 0.050 239.1);
+  --primary-600: oklch(0.38 0.05 239.1);
   --primary-700: oklch(0.337 0.042 240.5);
   --primary-800: oklch(0.294 0.035 238.1);
   --primary-900: oklch(0.247 0.027 235.7);
