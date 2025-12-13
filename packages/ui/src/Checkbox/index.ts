@@ -1,7 +1,11 @@
 export { default } from "./Checkbox";
 export { default as Checkbox } from "./Checkbox";
+export { default as CheckboxGroup } from "./CheckboxGroup";
 export { default as CheckboxControl } from "./CheckboxControl";
 export { default as CheckboxIndicator } from "./CheckboxIndicator";
 export type { CheckboxProps } from "./CheckboxTypes";
+export type { CheckboxGroupProps } from "./CheckboxGroupTypes";
 export type { CheckboxVariantProps } from "./CheckboxStyles";
+export type { CheckboxGroupVariantProps } from "./CheckboxGroupStyles";
 export { CheckboxStyles } from "./CheckboxStyles";
+export { CheckboxGroupStyles } from "./CheckboxGroupStyles";

@@ -9,8 +9,8 @@ const CheckboxColorTokens = {
     "[--lighter-color:theme(colors.primary.50)]",
     "[--light-color:theme(colors.primary.100)]",
     "[--main-color:theme(colors.primary.500)]",
-    "[--dark-color:theme(colors.primary.600)",
-    "[--darker-color:theme(colors.primary.700)",
+    "[--dark-color:theme(colors.primary.600)]",
+    "[--darker-color:theme(colors.primary.700)]",
     "[--checkbox-text:theme(colors.primary.50)]"
   ),
 };

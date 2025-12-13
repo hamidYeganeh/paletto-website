@@ -6,7 +6,9 @@
     ".": "./src/index.ts",
     "./Button": "./src/Button/index.ts",
     "./Checkbox": "./src/Checkbox/index.ts",
-    "./Skeleton": "./src/Skeleton/index.ts"
+    "./Label": "./src/Label/index.ts",
+    "./Skeleton": "./src/Skeleton/index.ts",
+    "./Text": "./src/Text/index.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

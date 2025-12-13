@@ -7,7 +7,18 @@ export type { CheckboxProps } from "./Checkbox/CheckboxTypes";
 export { CheckboxStyles } from "./Checkbox/CheckboxStyles";
 export { default as CheckboxControl } from "./Checkbox/CheckboxControl";
 export { default as CheckboxIndicator } from "./Checkbox/CheckboxIndicator";
+export { default as CheckboxGroup } from "./Checkbox/CheckboxGroup";
+export type { CheckboxGroupProps } from "./Checkbox/CheckboxGroupTypes";
+export { CheckboxGroupStyles } from "./Checkbox/CheckboxGroupStyles";
+
+export { default as Label } from "./Label";
+export type { LabelProps } from "./Label/LabelTypes";
+export { LabelStyles } from "./Label/LabelStyles";
 
 export { default as Skeleton } from "./Skeleton";
 export type { SkeletonProps } from "./Skeleton/SkeletonTypes";
 export { SkeletonStyles } from "./Skeleton/SkeletonStyles";
+
+export { default as Text } from "./Text";
+export type { TextProps } from "./Text/TextTypes";
+export { TextStyles } from "./Text/TextStyles";
