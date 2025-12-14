@@ -1,0 +1,19 @@
+@import "@repo/theme/theme.css";
+@import "tailwindcss";
+
+@source "./**/*.{ts,tsx,js,jsx,mdx}";
+@source "../../../packages/**/*.{ts,tsx,js,jsx,mdx}";
+
+:root {
+  --primary-50: #f4f6f6;
+  --primary-100: #bfcbc6;
+  --primary-200: #899f97;
+  --primary-300: #547468;
+  --primary-400: #274d3f;
+  --primary-500: #224337;
+  --primary-600: #1d3a2f;
+  --primary-700: #183027;
+  --primary-800: #13261f;
+  --primary-900: #0e1c17;
+  --primary-950: #09130f;
+}
