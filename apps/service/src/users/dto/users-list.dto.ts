@@ -1,6 +1,6 @@
 import { Type } from "class-transformer";
 import { IsNumber, IsOptional, IsString } from "class-validator";
-import { UserDocument } from "../users.schema";
+import { UserDocument } from "../schemas/users.schema";
 
 export class UsersListQueryDto {
   @Type(() => Number)
