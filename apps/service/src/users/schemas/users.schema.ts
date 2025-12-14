@@ -13,7 +13,7 @@ export interface UserProfile {
 }
 
 @Schema({ timestamps: true, _id: true })
-export class User extends Document {
+export class User {
   /* ---------------- AUTH ---------------- */
 
   @Prop({ required: true })
