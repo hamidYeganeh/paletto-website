@@ -47,6 +47,14 @@ const ButtonBaseStyles = cva(
           "[--darker-color:theme(colors.primary.700)]",
           "[--text-color:theme(colors.primary.50)]"
         ),
+        default: cn(
+          "[--lighter-color:theme(colors.gray.100)]",
+          "[--light-color:theme(colors.gray.300)]",
+          "[--main-color:theme(colors.white)]",
+          "[--dark-color:theme(colors.gray.600)]",
+          "[--darker-color:theme(colors.gray.700)]",
+          "[--text-color:theme(colors.gray.900)]"
+        ),
       },
 
       /* ---------------------------------------------------------------------
@@ -54,10 +62,10 @@ const ButtonBaseStyles = cva(
        * ------------------------------------------------------------------ */
 
       size: {
-        xs: "h-6 px-1 text-xs",
-        sm: "h-8 px-3 text-xs",
-        md: "h-10 px-4 text-sm",
-        lg: "h-12 px-6 text-base",
+        xs: "h-10 px-1 text-xs",
+        sm: "h-11 px-3 text-xs",
+        md: "h-12 px-4 text-sm",
+        lg: "h-13 px-6 text-base",
         xl: "h-14 px-8 text-lg",
       },
 

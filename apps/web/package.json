@@ -14,8 +14,9 @@
     "@repo/api": "*",
     "@repo/i18n": "*",
     "@repo/theme": "*",
-    "@repo/utils": "*",
     "@repo/ui": "*",
+    "@repo/utils": "*",
+    "framer-motion": "^12.23.26",
     "next": "16.0.10",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"

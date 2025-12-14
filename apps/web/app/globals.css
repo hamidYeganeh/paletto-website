@@ -5,15 +5,15 @@
 @source "../../../packages/**/*.{ts,tsx,js,jsx,mdx}";
 
 :root {
-  --primary-50: oklch(0.975 0.003 247.9);
-  --primary-100: oklch(0.851 0.018 240);
-  --primary-200: oklch(0.722 0.035 238.4);
-  --primary-300: oklch(0.59 0.051 239.1);
-  --primary-400: oklch(0.464 0.063 239.6);
-  --primary-500: oklch(0.422 0.056 238.8);
-  --primary-600: oklch(0.38 0.05 239.1);
-  --primary-700: oklch(0.337 0.042 240.5);
-  --primary-800: oklch(0.294 0.035 238.1);
-  --primary-900: oklch(0.247 0.027 235.7);
-  --primary-950: oklch(0.198 0.019 235.4);
+  --primary-50: #f4f6f6;
+  --primary-100: #bfcbc6;
+  --primary-200: #899f97;
+  --primary-300: #547468;
+  --primary-400: #274d3f;
+  --primary-500: #224337;
+  --primary-600: #1d3a2f;
+  --primary-700: #183027;
+  --primary-800: #13261f;
+  --primary-900: #0e1c17;
+  --primary-950: #09130f;
 }
