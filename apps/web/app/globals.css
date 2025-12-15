@@ -29,4 +29,34 @@
   --primary-800: #13261f;
   --primary-900: #0e1c17;
   --primary-950: #09130f;
-} */
+}
+
+.input-border-b-glow {
+  position: relative;
+}
+.input-border-b-glow::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -2px;
+  height: 2px;
+
+  background: radial-gradient(
+    ellipse at top,
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0) 70%
+  );
+
+  opacity: 0;
+  transform-origin: bottom center;
+  transform: scale(0.8);
+  transition:
+    opacity 0.25s ease-out,
+    transform 0.25s ease-out;
+  will-change: transform, opacity;
+}
+.input-border-b-glow:focus-within::after {
+  opacity: 1;
+  transform: scale(1);
+}

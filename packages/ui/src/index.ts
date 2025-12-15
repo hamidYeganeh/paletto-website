@@ -11,6 +11,11 @@ export { default as CheckboxGroup } from "./Checkbox/CheckboxGroup";
 export type { CheckboxGroupProps } from "./Checkbox/CheckboxGroupTypes";
 export { CheckboxGroupStyles } from "./Checkbox/CheckboxGroupStyles";
 
+export { default as Input } from "./Input";
+export type { InputProps } from "./Input/InputTypes";
+export type { InputVariantProps } from "./Input/InputStyles";
+export { InputStyles } from "./Input/InputStyles";
+
 export { default as Label } from "./Label";
 export type { LabelProps } from "./Label/LabelTypes";
 export { LabelStyles } from "./Label/LabelStyles";

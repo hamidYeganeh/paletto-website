@@ -1,9 +1,4 @@
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class AppService {
-  getHello() {
-    return { ok: true };
-  }
-}
-
+export class AppService {}
