@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument } from "mongoose";
 import { UserRoles } from "../enums/users-roles.enum";
-import { UserProfileSchema } from "./users-user-profile.schema";
+import { UserProfile, UserProfileSchema } from "./users-user-profile.schema";
 import {
   ArtistProfile,
   ArtistProfileSchema,
@@ -9,9 +9,6 @@ import {
 import { UserStatus } from "../enums/users-status.enum";
 
 export type UserDocument = HydratedDocument<User>;
-export interface UserProfile {
-  hasBoughtBefore: boolean;
-}
 
 @Schema({ timestamps: true, _id: true })
 export class User {
@@ -47,18 +44,18 @@ export class User {
   @Prop({
     type: UserProfileSchema,
     default: null,
-    required: function (this: User) {
-      return this.role === UserRoles.USER;
-    },
+    // required: function (this: User) {
+    //   return this.role === UserRoles.USER;
+    // },
   })
   userProfile?: UserProfile | null;
 
   @Prop({
     type: ArtistProfileSchema,
     default: null,
-    required: function (this: User) {
-      return this.role === UserRoles.ARTIST;
-    },
+    // required: function (this: User) {
+    //   return this.role === UserRoles.ARTIST;
+    // },
   })
   artistProfile?: ArtistProfile | null;
 

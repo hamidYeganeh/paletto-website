@@ -39,7 +39,7 @@ export class ArtistProfile {
   @Prop({ default: 0 })
   reviewsCount: number;
 
-  /* ---------- COMMISSIONS ---------- */
+  /* ---------- COMMERCIAL ---------- */
 
   @Prop({ default: false })
   acceptsCommissions: boolean;

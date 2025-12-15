@@ -1,30 +1,40 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { User, UserDocument } from "../schemas/users.schema";
 import { Model, QueryFilter } from "mongoose";
-import { UsersListQueryDto, UsersListResponseDto } from "../dto/users-list.dto";
 import {
   DEFAULT_LIST_LIMIT,
   DEFAULT_LIST_PAGE,
 } from "src/constants/list-pagination.constants";
+import { UsersListQueryDto, UsersListResponseDto } from "../dto/users-list.dto";
+import { User, UserDocument } from "../schemas/users.schema";
 
 @Injectable()
 export class UsersListService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>
+  ) {}
 
-  buildQuery(query: UsersListQueryDto): QueryFilter<UserDocument> {
-    const { search } = query;
+  private escapeRegExp(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  private buildQuery(query: UsersListQueryDto): QueryFilter<UserDocument> {
+    const search = query.search?.trim();
 
     const queryObject: QueryFilter<UserDocument> = {};
 
     if (search) {
-      queryObject.$or = [{ name: { $regex: search, $options: "i" } }];
+      const safeSearch = this.escapeRegExp(search);
+      queryObject.$or = [
+        { name: { $regex: safeSearch, $options: "i" } },
+        { email: { $regex: safeSearch, $options: "i" } },
+      ];
     }
 
     return queryObject;
   }
 
-  getSkip(page: number, limit: number) {
+  private getSkip(page: number, limit: number): number {
     return Math.max(0, page - 1) * limit;
   }
 
