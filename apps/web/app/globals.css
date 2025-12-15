@@ -5,6 +5,19 @@
 @source "../../../packages/**/*.{ts,tsx,js,jsx,mdx}";
 
 :root {
+  --primary-50: #f4f5f5;
+  --primary-100: #bcc3c4;
+  --primary-200: #849293;
+  --primary-300: #4c6062;
+  --primary-400: #1d3538;
+  --primary-500: #1a2e31;
+  --primary-600: #16282a;
+  --primary-700: #122123;
+  --primary-800: #0f1a1c;
+  --primary-900: #0b1415;
+  --primary-950: #070d0e;
+}
+/* :root {
   --primary-50: #f4f6f6;
   --primary-100: #bfcbc6;
   --primary-200: #899f97;
@@ -16,4 +29,4 @@
   --primary-800: #13261f;
   --primary-900: #0e1c17;
   --primary-950: #09130f;
-}
+} */

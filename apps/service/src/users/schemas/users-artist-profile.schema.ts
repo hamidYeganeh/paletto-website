@@ -54,15 +54,6 @@ export class ArtistProfile {
 
   @Prop({ default: false })
   isVerified: boolean;
-
-  @Prop()
-  verificationRequestedAt?: Date;
-
-  @Prop({ default: true })
-  isActive: boolean;
-
-  @Prop()
-  featuredAt?: Date;
 }
 
 export const ArtistProfileSchema = SchemaFactory.createForClass(ArtistProfile);

@@ -6,6 +6,7 @@ import {
   ArtistProfile,
   ArtistProfileSchema,
 } from "./users-artist-profile.schema";
+import { UserStatus } from "../enums/users-status.enum";
 
 export type UserDocument = HydratedDocument<User>;
 export interface UserProfile {
@@ -13,7 +14,7 @@ export interface UserProfile {
 }
 
 @Schema({ timestamps: true, _id: true })
-export class User extends Document {
+export class User {
   /* ---------------- AUTH ---------------- */
 
   @Prop({ required: true })
@@ -60,6 +61,11 @@ export class User extends Document {
     },
   })
   artistProfile?: ArtistProfile | null;
+
+  /* ---------- STATUS & VISIBILITY ---------- */
+
+  @Prop({ type: String, enum: UserStatus, default: UserStatus.ACTIVE })
+  status: UserStatus;
 
   _id: string;
 

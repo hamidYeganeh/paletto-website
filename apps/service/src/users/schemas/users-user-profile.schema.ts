@@ -47,11 +47,6 @@ export class UserProfile {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: "User" }], default: [] })
   followedArtists: Types.ObjectId[];
-
-  /* ---------- STATUS ---------- */
-
-  @Prop({ default: false })
-  isCollector: boolean;
 }
 
 export const UserProfileSchema = SchemaFactory.createForClass(UserProfile);
