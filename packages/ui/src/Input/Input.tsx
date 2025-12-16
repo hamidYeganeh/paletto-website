@@ -117,7 +117,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {labelPlacement === "inside" && label && (
               <label
                 htmlFor={inputId}
-                className="absolute top-1 left-0 text-[10px] text-zinc-500"
+                className="absolute top-1 left-0 text-white text-sm"
               >
                 {label}
               </label>
@@ -128,7 +128,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               id={inputId}
               type={type}
               className={cn(
-                InputStyles.input({ size: 'md' }),
+                InputStyles.input({ size: "md" }),
                 labelPlacement === "inside" ? "pt-4" : ""
               )}
               placeholder={placeholder}

@@ -13,7 +13,6 @@ export { CheckboxGroupStyles } from "./Checkbox/CheckboxGroupStyles";
 
 export { default as Input } from "./Input";
 export type { InputProps } from "./Input/InputTypes";
-export type { InputVariantProps } from "./Input/InputStyles";
 export { InputStyles } from "./Input/InputStyles";
 
 export { default as Label } from "./Label";

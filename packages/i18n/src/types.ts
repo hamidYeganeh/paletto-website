@@ -1,7 +1,7 @@
-import enCommon from "./messages/en/Common.json";
-import enHome from "./messages/en/Home.json";
+import faCommon from "./messages/fa/Common.json";
+import faAuth from "./messages/fa/Auth.json";
 
 export type Messages = {
-  Common: typeof enCommon;
-  Home: typeof enHome;
+  Common: typeof faCommon;
+  Auth: typeof faAuth;
 };

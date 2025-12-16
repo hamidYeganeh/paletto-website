@@ -8,13 +8,15 @@ import Providers from "./Providers";
 import { getDefaultMetadata } from "./seo";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
+const yekanBakh = localFont({
+  src: [
+    { path: "./fonts/YekanBakh/YekanBakhFaNum-Regular.ttf", weight: "400" },
+    { path: "./fonts/YekanBakh/YekanBakhFaNum-Regular.ttf", weight: "500" },
+    { path: "./fonts/YekanBakh/YekanBakhFaNum-SemiBold.ttf", weight: "600" },
+    { path: "./fonts/YekanBakh/YekanBakhFaNum-Bold.ttf", weight: "700" },
+    { path: "./fonts/YekanBakh/YekanBakhFaNum-ExtraBold.ttf", weight: "800" },
+  ],
+  variable: "--font-yekanbakh",
 });
 
 export const metadata: Metadata = getDefaultMetadata();
@@ -43,7 +45,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir="rtl" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${yekanBakh.variable}`}>
         <Providers locale={locale} messages={messages}>
           {children}
         </Providers>

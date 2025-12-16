@@ -10,7 +10,8 @@
     "./Label": "./src/Label/index.ts",
     "./Modal": "./src/Modal/index.ts",
     "./Skeleton": "./src/Skeleton/index.ts",
-    "./Text": "./src/Text/index.ts"
+    "./Text": "./src/Text/index.ts",
+    "./Shared/*": "./src/Shared/index.ts"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -29,6 +30,7 @@
   "dependencies": {
     "@repo/hooks": "^0.0.0",
     "@repo/utils": "*",
+    "framer-motion": "^12.23.26",
     "react": "^19.2.0",
     "react-aria-components": "^1.13.0",
     "react-dom": "^19.2.0"

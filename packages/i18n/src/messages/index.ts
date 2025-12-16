@@ -1,18 +1,11 @@
-import enCommon from "./en/Common.json";
-import enHome from "./en/Home.json";
-import frCommon from "./fr/Common.json";
-import frHome from "./fr/Home.json";
+import faCommon from "./fa/Common.json";
+import faAuth from "./fa/Auth.json";
 
 export const messagesByLocale = {
-  en: {
-    Common: enCommon,
-    Home: enHome,
-  },
-  fr: {
-    Common: frCommon,
-    Home: frHome,
+  fa: {
+    Common: faCommon,
+    Auth: faAuth,
   },
 } as const;
 
-export const en = messagesByLocale.en;
-export const fr = messagesByLocale.fr;
+export const fa = messagesByLocale.fa;
