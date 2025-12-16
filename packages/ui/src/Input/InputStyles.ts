@@ -1,4 +1,4 @@
-import { cva } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority";
 
 export const InputStyles = {
   base: cva("group flex flex-col gap-1 data-[hidden=true]:hidden", {
@@ -72,7 +72,7 @@ export const InputStyles = {
     }
   ),
   input: cva(
-    "w-full h-full font-normal !bg-transparent outline-none placeholder:text-white placeholder:text-xs focus-visible:outline-none data-[has-start-content=true]:ps-1.5 data-[has-end-content=true]:pe-1.5 file:bg-transparent file:border-0 file:bg-none file:text-sm file:font-medium",
+    "w-full h-full font-normal !bg-transparent outline-none placeholder:text-white placeholder:text-sm focus-visible:outline-none data-[has-start-content=true]:ps-1.5 data-[has-end-content=true]:pe-1.5 file:bg-transparent file:border-0 file:bg-none file:text-sm file:font-medium",
     {
       variants: {
         size: {
@@ -92,3 +92,6 @@ export const InputStyles = {
     "p-1 rounded-full hover:bg-zinc-200 text-zinc-500 cursor-pointer transition-colors"
   ),
 };
+
+export type InputVariantProps = VariantProps<typeof InputStyles.inputWrapper> &
+  VariantProps<typeof InputStyles.base>;
