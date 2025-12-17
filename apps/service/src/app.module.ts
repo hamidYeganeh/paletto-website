@@ -5,12 +5,12 @@ import { UsersModule } from "./users/users.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { AuthModule } from "./auth/auth.module";
-import { CategoryModule } from "./category/category.module";
 import { TechniquesModule } from "./techniques/techniques.module";
 import { ArtworksModule } from "./artworks/artworks.module";
 import { MediumsModule } from "./mediums/mediums.module";
 import { StylesModule } from "./styles/styles.module";
 import { OffersModule } from "./offers/offers.module";
+import { CategoriesModule } from "./categories/categories.module";
 import configs from "./config";
 import envValidationSchema from "./config/env.validation";
 
@@ -35,12 +35,12 @@ import envValidationSchema from "./config/env.validation";
     }),
     UsersModule,
     AuthModule,
-    CategoryModule,
     TechniquesModule,
     ArtworksModule,
     MediumsModule,
     StylesModule,
     OffersModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

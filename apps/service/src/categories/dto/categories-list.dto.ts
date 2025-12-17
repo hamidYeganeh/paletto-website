@@ -1,25 +1,25 @@
 import { Transform, Type } from "class-transformer";
 import { IsInt, IsOptional, IsString, MaxLength, Min } from "class-validator";
-import { UserDocument } from "../schemas/users.schema";
 import {
   DEFAULT_LIST_LIMIT,
   DEFAULT_LIST_PAGE,
 } from "src/constants/list-pagination.constants";
+import { CategoryDocument } from "../schemas/categories.schema";
 
-export class UsersListQueryDto {
+export class CategoriesListQueryDto {
   @Transform(({ value }) => (value === "" ? undefined : value))
   @Type(() => Number)
   @IsOptional()
   @IsInt()
   @Min(DEFAULT_LIST_PAGE)
-  page?: number;
+  page: number;
 
   @Transform(({ value }) => (value === "" ? undefined : value))
   @Type(() => Number)
   @IsOptional()
   @IsInt()
   @Min(DEFAULT_LIST_LIMIT)
-  limit?: number;
+  limit: number;
 
   @IsOptional()
   @IsString()
@@ -27,7 +27,7 @@ export class UsersListQueryDto {
   search?: string;
 }
 
-export interface UsersListResponseDto {
+export interface CategoriesListResponseDto {
   count: number;
-  users: UserDocument[];
+  categories: CategoryDocument[];
 }

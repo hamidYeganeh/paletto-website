@@ -1,0 +1,63 @@
+import { InjectModel } from "@nestjs/mongoose";
+import {
+  CategoriesListQueryDto,
+  CategoriesListResponseDto,
+} from "../dto/categories-list.dto";
+import { Category, CategoryDocument } from "../schemas/categories.schema";
+import { Model, QueryFilter } from "mongoose";
+import {
+  DEFAULT_LIST_LIMIT,
+  DEFAULT_LIST_PAGE,
+} from "src/constants/list-pagination.constants";
+
+export class CategoriesListService {
+  constructor(
+    @InjectModel(Category.name)
+    private readonly categoriesModel: Model<CategoryDocument>
+  ) {}
+
+  private escapeRegExp(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  buildQuery(query: CategoriesListQueryDto) {
+    const search = query.search?.trim();
+
+    const queryObject: QueryFilter<CategoryDocument> = {};
+
+    if (search) {
+      const safeSearch = this.escapeRegExp(search);
+      queryObject.$or = [{ name: { $regex: safeSearch, $options: "i" } }];
+    }
+
+    return queryObject;
+  }
+
+  private getSkip(page: number, limit: number): number {
+    return Math.max(0, page - 1) * limit;
+  }
+
+  async execute(
+    query: CategoriesListQueryDto
+  ): Promise<CategoriesListResponseDto> {
+    const page = query.page ?? DEFAULT_LIST_PAGE;
+    const limit = query?.limit ?? DEFAULT_LIST_LIMIT;
+    const filter = this.buildQuery(query);
+    const skip = this.getSkip(page, limit);
+
+    const [count, categories] = await Promise.all([
+      this.categoriesModel.countDocuments(filter),
+      this.categoriesModel
+        .find(filter)
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: -1 })
+        .exec(),
+    ]);
+
+    return {
+      count,
+      categories,
+    };
+  }
+}

@@ -6,6 +6,7 @@
     ".": "./src/index.ts",
     "./Button": "./src/Button/index.ts",
     "./Checkbox": "./src/Checkbox/index.ts",
+    "./Form": "./src/Form/index.ts",
     "./Input": "./src/Input/index.ts",
     "./Label": "./src/Label/index.ts",
     "./Modal": "./src/Modal/index.ts",
@@ -30,9 +31,12 @@
   "dependencies": {
     "@repo/hooks": "^0.0.0",
     "@repo/utils": "*",
+    "@hookform/resolvers": "^3.3.4",
     "framer-motion": "^12.23.26",
     "react": "^19.2.0",
     "react-aria-components": "^1.13.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-hook-form": "^7.55.0",
+    "zod": "^3.23.8"
   }
 }
