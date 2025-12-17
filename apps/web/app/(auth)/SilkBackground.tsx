@@ -153,6 +153,8 @@ export type SilkBackgroundProps = {
   noiseIntensity?: number;
   rotation?: number;
   fps?: number;
+  className?: string;
+  onReady?: () => void;
 };
 
 export default function SilkBackground({
@@ -162,6 +164,8 @@ export default function SilkBackground({
   noiseIntensity = 1.5,
   rotation = 0,
   fps = 30,
+  className,
+  onReady,
 }: SilkBackgroundProps) {
   const meshRef = useRef<Mesh>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -191,10 +195,28 @@ export default function SilkBackground({
       dpr={1}
       frameloop="demand"
       gl={{ alpha: true, antialias: false, powerPreference: "low-power" }}
-      className="h-full w-full"
+      className={["h-full w-full", className].filter(Boolean).join(" ")}
     >
       <FrameThrottle enabled={!prefersReducedMotion && isVisible} fps={fps} />
+      <ReadySignal onReady={onReady} />
       <SilkPlane uniforms={uniforms} meshRef={meshRef} />
     </Canvas>
   );
+}
+
+function ReadySignal({ onReady }: { onReady?: () => void }) {
+  const hasSignaledRef = useRef(false);
+  const invalidate = useThree((state) => state.invalidate);
+
+  useEffect(() => {
+    invalidate();
+  }, [invalidate]);
+
+  useFrame(() => {
+    if (hasSignaledRef.current) return;
+    hasSignaledRef.current = true;
+    onReady?.();
+  });
+
+  return null;
 }

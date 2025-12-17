@@ -88,7 +88,7 @@ export default function LoginPage() {
               animate={
                 isFocused ? { opacity: 1, y: 0 } : { opacity: 0, y: 100 }
               }
-              className="text-lg font-bold text-white"
+              className="text-lg font-bold text-white select-none"
             >
               {t("Auth.Login.form.login-register-label")}
             </motion.p>
