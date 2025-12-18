@@ -5,6 +5,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { Category, CategorySchema } from "./schemas/categories.schema";
 import { CategoriesCreateService } from "./services/categories-create.service";
 import { CategoriesListService } from "./services/categories-list.service";
+import { CategoriesUpdateService } from "./services/categories-update.service";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CategoriesListService } from "./services/categories-list.service";
     CategoriesService,
     CategoriesListService,
     CategoriesCreateService,
+    CategoriesUpdateService,
   ],
 })
 export class CategoriesModule {}
