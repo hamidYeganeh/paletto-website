@@ -54,7 +54,7 @@
       }
       .grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         gap: 16px;
       }
       .card {
@@ -153,7 +153,9 @@
           <h1>Categories Service Demo</h1>
           <div class="hint">
             Targets Nest endpoints:
-            <code>GET /categories/list</code> and <code>POST /categories</code>.
+            <code>GET /categories/list</code> and
+            <code>POST /categories/create</code> and
+            <code>PATCH /categories/update</code>.
             Default service URL is <code>http://localhost:5000</code>. If you
             open this file directly and your browser blocks requests, serve it
             via a local server (e.g. <code>python3 -m http.server</code>).
@@ -205,7 +207,9 @@
           </div>
 
           <div class="actions">
-            <button class="primary" id="createBtn">POST /categories</button>
+            <button class="primary" id="createBtn">
+              POST /categories/create
+            </button>
             <button class="danger" id="clearOutBtn">Clear output</button>
           </div>
         </div>
@@ -225,12 +229,62 @@
           </div>
 
           <label style="margin-top: 10px">
+            Search in title (optional)
+            <input id="listSearch" placeholder="e.g. paint" />
+          </label>
+
+          <label style="margin-top: 10px">
             Slug (optional)
-            <input id="listSlug" placeholder="filter (server uses regex)" />
+            <input id="listSlug" placeholder="e.g. painting or a,b,c" />
           </label>
 
           <div class="actions">
             <button class="primary" id="listBtn">GET /categories/list</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h2>Update Category</h2>
+
+          <label>
+            Category ID
+            <input id="updateCategoryId" placeholder="Mongo ObjectId" />
+          </label>
+
+          <label style="margin-top: 10px">
+            Title (optional)
+            <input id="updateTitle" placeholder="e.g. painting" />
+          </label>
+
+          <label style="margin-top: 10px">
+            Slug (optional)
+            <input id="updateSlug" placeholder="e.g. painting" />
+          </label>
+
+          <div class="row">
+            <label>
+              Status (optional)
+              <select id="updateStatus">
+                <option value="">(optional)</option>
+                <option value="active">active</option>
+                <option value="deactive">deactive</option>
+              </select>
+            </label>
+            <label>
+              Description (optional)
+              <input
+                id="updateDescription"
+                placeholder="Short description..."
+              />
+            </label>
+          </div>
+
+          <div class="actions">
+            <button class="primary" id="updateBtn">
+              PATCH /categories/update
+            </button>
           </div>
         </div>
       </div>
@@ -254,8 +308,16 @@
 
       const listPageEl = $("listPage");
       const listLimitEl = $("listLimit");
+      const listSearchEl = $("listSearch");
       const listSlugEl = $("listSlug");
       const listBtn = $("listBtn");
+
+      const updateCategoryIdEl = $("updateCategoryId");
+      const updateTitleEl = $("updateTitle");
+      const updateSlugEl = $("updateSlug");
+      const updateStatusEl = $("updateStatus");
+      const updateDescriptionEl = $("updateDescription");
+      const updateBtn = $("updateBtn");
 
       function setStatus(text) {
         statusEl.textContent = text ?? "";
@@ -274,6 +336,7 @@
       function setLoading(isLoading) {
         createBtn.disabled = isLoading;
         listBtn.disabled = isLoading;
+        updateBtn.disabled = isLoading;
         setStatus(isLoading ? "Loading..." : "");
       }
 
@@ -321,6 +384,14 @@
           "categories-demo.listLimit",
           listLimitEl.value.trim()
         );
+        localStorage.setItem(
+          "categories-demo.listSearch",
+          listSearchEl.value.trim()
+        );
+        localStorage.setItem(
+          "categories-demo.listSlug",
+          listSlugEl.value.trim()
+        );
       }
 
       function loadDefaults() {
@@ -331,6 +402,9 @@
           localStorage.getItem("categories-demo.listPage") || "1";
         listLimitEl.value =
           localStorage.getItem("categories-demo.listLimit") || "10";
+        listSearchEl.value =
+          localStorage.getItem("categories-demo.listSearch") || "";
+        listSlugEl.value = localStorage.getItem("categories-demo.listSlug") || "";
       }
 
       loadDefaults();
@@ -339,6 +413,8 @@
       baseUrlEl.addEventListener("change", saveDefaults);
       listPageEl.addEventListener("change", saveDefaults);
       listLimitEl.addEventListener("change", saveDefaults);
+      listSearchEl.addEventListener("change", saveDefaults);
+      listSlugEl.addEventListener("change", saveDefaults);
 
       clearOutBtn.addEventListener("click", () => setOut({}));
 
@@ -358,7 +434,7 @@
             ...(slug ? { slug } : {}),
           };
 
-          const data = await request("/categories", {
+          const data = await request("/categories/create", {
             method: "POST",
             body: JSON.stringify(payload),
           });
@@ -381,9 +457,11 @@
           const params = new URLSearchParams();
           const page = listPageEl.value.trim();
           const limit = listLimitEl.value.trim();
+          const search = listSearchEl.value.trim();
           const slug = listSlugEl.value.trim();
           if (page) params.set("page", page);
           if (limit) params.set("limit", limit);
+          if (search) params.set("search", search);
           if (slug) params.set("slug", slug);
 
           const data = await request(`/categories/list?${params.toString()}`, {
@@ -397,6 +475,41 @@
         } catch (e) {
           setOut({
             action: "list",
+            error: String(e && e.message ? e.message : e),
+            details: e && e.body ? e.body : undefined,
+          });
+        } finally {
+          setLoading(false);
+        }
+      });
+
+      updateBtn.addEventListener("click", async () => {
+        saveDefaults();
+        setLoading(true);
+        try {
+          const categoryID = updateCategoryIdEl.value.trim();
+          const title = updateTitleEl.value.trim();
+          const slug = updateSlugEl.value.trim();
+          const status = updateStatusEl.value.trim();
+          const description = updateDescriptionEl.value.trim();
+
+          const payload = {
+            categoryID,
+            ...(title ? { title } : {}),
+            ...(slug ? { slug } : {}),
+            ...(status ? { status } : {}),
+            ...(description ? { description } : {}),
+          };
+
+          const data = await request("/categories/update", {
+            method: "PATCH",
+            body: JSON.stringify(payload),
+          });
+
+          setOut({ action: "update", payload, response: data });
+        } catch (e) {
+          setOut({
+            action: "update",
             error: String(e && e.message ? e.message : e),
             details: e && e.body ? e.body : undefined,
           });

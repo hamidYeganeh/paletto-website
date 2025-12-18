@@ -22,12 +22,22 @@ export class CategoriesListService {
 
   buildQuery(query: CategoriesListQueryDto) {
     const search = query.search?.trim();
+    const slug = query.slug;
 
     const queryObject: QueryFilter<CategoryDocument> = {};
 
+    if (slug) {
+      const slugs = slug
+        .split(",")
+        .map((value) => value.trim())
+        .filter(Boolean);
+
+      queryObject.slug = slugs.length > 1 ? { $in: slugs } : slugs[0];
+    }
+
     if (search) {
       const safeSearch = this.escapeRegExp(search);
-      queryObject.$or = [{ name: { $regex: safeSearch, $options: "i" } }];
+      queryObject.$or = [{ title: { $regex: safeSearch, $options: "i" } }];
     }
 
     return queryObject;

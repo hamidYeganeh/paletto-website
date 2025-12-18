@@ -25,6 +25,16 @@ export class CategoriesListQueryDto {
   @IsString()
   @MaxLength(200)
   search?: string;
+
+  @Transform(({ value }) => {
+    if (typeof value !== "string") return value;
+    const trimmed = value.trim();
+    return trimmed === "" ? undefined : trimmed;
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  slug?: string;
 }
 
 export interface CategoriesListResponseDto {

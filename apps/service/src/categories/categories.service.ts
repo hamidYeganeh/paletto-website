@@ -19,7 +19,7 @@ export class CategoriesService {
   ) {}
 
   async getCategoriesList(
-    query: CategoriesListQueryDto
+  query: CategoriesListQueryDto
   ): Promise<CategoriesListResponseDto> {
     return this.categoriesListService.execute(query);
   }
