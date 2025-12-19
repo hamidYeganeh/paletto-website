@@ -26,6 +26,17 @@ export class ArtworksUpdateService {
     try {
       Object.entries(dto).forEach(([key, value]) => {
         if (key !== "artworkID" && value !== undefined) {
+          if (
+            (key === "categories" ||
+              key === "techniques" ||
+              key === "materials" ||
+              key === "mediums") &&
+            Array.isArray(value)
+          ) {
+            updateFields[key] = value.map((id) => new Types.ObjectId(String(id)));
+            return;
+          }
+
           updateFields[key] = value;
         }
       });
@@ -54,4 +65,3 @@ export class ArtworksUpdateService {
     }
   }
 }
-

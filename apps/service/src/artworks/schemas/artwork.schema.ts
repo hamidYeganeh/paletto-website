@@ -15,6 +15,9 @@ export class Artwork {
   @Prop({ required: true })
   artistID: string;
 
+  @Prop({ type: [{ type: Types.ObjectId, ref: "Category" }], default: [] })
+  categories: Types.ObjectId[];
+
   @Prop({ type: [{ type: Types.ObjectId, ref: "Technique" }], default: [] })
   techniques: Types.ObjectId[];
 
@@ -23,6 +26,24 @@ export class Artwork {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: "Mediums" }], default: [] })
   mediums: Types.ObjectId[];
+
+  @Prop({ type: [String], default: [] })
+  tags: string[];
+
+  @Prop({ type: [String], default: [] })
+  images: string[];
+
+  @Prop({ type: Number, min: 0 })
+  year?: number;
+
+  @Prop({ type: Number, min: 0 })
+  widthCm?: number;
+
+  @Prop({ type: Number, min: 0 })
+  heightCm?: number;
+
+  @Prop({ type: Number, min: 0 })
+  depthCm?: number;
 
   @Prop({ required: true })
   price: number;

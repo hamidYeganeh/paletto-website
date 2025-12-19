@@ -23,8 +23,13 @@ export class TechniquesListService {
   buildQuery(query: TechniquesListQueryDto) {
     const search = query.search?.trim();
     const slug = query.slug;
+    const status = query.status;
 
     const queryObject: QueryFilter<TechniqueDocument> = {};
+
+    if (status) {
+      queryObject.status = status;
+    }
 
     if (slug) {
       const slugs = slug
@@ -71,4 +76,3 @@ export class TechniquesListService {
     };
   }
 }
-

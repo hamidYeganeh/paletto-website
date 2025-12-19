@@ -33,6 +33,11 @@ export class ArtworkCreateDto {
   @IsOptional()
   @IsArray()
   @IsMongoId({ each: true })
+  categories?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsMongoId({ each: true })
   techniques?: string[];
 
   @IsOptional()
@@ -45,6 +50,42 @@ export class ArtworkCreateDto {
   @IsMongoId({ each: true })
   mediums?: string[];
 
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  @MaxLength(50, { each: true })
+  tags?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  @MaxLength(1000, { each: true })
+  images?: string[];
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  year?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  widthCm?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  heightCm?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  depthCm?: number;
+
   @Type(() => Number)
   @IsNumber()
   @Min(0)
@@ -54,4 +95,3 @@ export class ArtworkCreateDto {
   @IsEnum(ArtworksStatus)
   status?: ArtworksStatus;
 }
-

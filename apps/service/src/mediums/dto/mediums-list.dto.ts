@@ -1,10 +1,18 @@
 import { Transform, Type } from "class-transformer";
-import { IsInt, IsOptional, IsString, MaxLength, Min } from "class-validator";
+import {
+  IsEnum,
+  IsInt,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+} from "class-validator";
 import {
   DEFAULT_LIST_LIMIT,
   DEFAULT_LIST_PAGE,
 } from "src/constants/list-pagination.constants";
 import { MediumDocument } from "../schemas/mediums.schema";
+import { MediumStatus } from "../enums/mediums-status.enum";
 
 export class MediumsListQueryDto {
   @Transform(({ value }) => (value === "" ? undefined : value))
@@ -35,6 +43,10 @@ export class MediumsListQueryDto {
   @IsString()
   @MaxLength(200)
   slug?: string;
+
+  @IsOptional()
+  @IsEnum(MediumStatus)
+  status?: MediumStatus;
 }
 
 export interface MediumsListResponseDto {

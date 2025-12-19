@@ -1,10 +1,18 @@
 import { Transform, Type } from "class-transformer";
-import { IsInt, IsOptional, IsString, MaxLength, Min } from "class-validator";
+import {
+  IsEnum,
+  IsInt,
+  IsOptional,
+  IsString,
+  MaxLength,
+  Min,
+} from "class-validator";
 import {
   DEFAULT_LIST_LIMIT,
   DEFAULT_LIST_PAGE,
 } from "src/constants/list-pagination.constants";
 import { TechniqueDocument } from "../schemas/techniques.schema";
+import { TechniquesStatus } from "../enums/techniques-status.enum";
 
 export class TechniquesListQueryDto {
   @Transform(({ value }) => (value === "" ? undefined : value))
@@ -35,10 +43,13 @@ export class TechniquesListQueryDto {
   @IsString()
   @MaxLength(200)
   slug?: string;
+
+  @IsOptional()
+  @IsEnum(TechniquesStatus)
+  status?: TechniquesStatus;
 }
 
 export interface TechniquesListResponseDto {
   count: number;
   techniques: TechniqueDocument[];
 }
-

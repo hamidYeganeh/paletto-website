@@ -18,6 +18,7 @@ export class ArtworksCreateService {
     try {
       const created = await this.artworkModel.create({
         ...dto,
+        categories: dto.categories?.map((id) => new Types.ObjectId(id)),
         techniques: dto.techniques?.map((id) => new Types.ObjectId(id)),
         materials: dto.materials?.map((id) => new Types.ObjectId(id)),
         mediums: dto.mediums?.map((id) => new Types.ObjectId(id)),

@@ -4,7 +4,7 @@ import {
   ArtworksListResponseDto,
 } from "../dto/artworks-list.dto";
 import { Artwork, ArtworkDocument } from "../schemas/artwork.schema";
-import { Model, QueryFilter } from "mongoose";
+import { Model, QueryFilter, Types } from "mongoose";
 import {
   DEFAULT_LIST_LIMIT,
   DEFAULT_LIST_PAGE,
@@ -33,9 +33,48 @@ export class ArtworksListService {
       queryObject.status = query.status;
     }
 
+    if (query.categories?.length) {
+      queryObject.categories = {
+        $in: query.categories.map((id) => new Types.ObjectId(id)),
+      };
+    }
+
+    if (query.techniques?.length) {
+      queryObject.techniques = {
+        $in: query.techniques.map((id) => new Types.ObjectId(id)),
+      };
+    }
+
+    if (query.mediums?.length) {
+      queryObject.mediums = {
+        $in: query.mediums.map((id) => new Types.ObjectId(id)),
+      };
+    }
+
+    if (query.tags?.length) {
+      queryObject.tags = { $in: query.tags };
+    }
+
+    if (query.minPrice !== undefined || query.maxPrice !== undefined) {
+      queryObject.price = {
+        ...(query.minPrice !== undefined ? { $gte: query.minPrice } : {}),
+        ...(query.maxPrice !== undefined ? { $lte: query.maxPrice } : {}),
+      };
+    }
+
+    if (query.minYear !== undefined || query.maxYear !== undefined) {
+      queryObject.year = {
+        ...(query.minYear !== undefined ? { $gte: query.minYear } : {}),
+        ...(query.maxYear !== undefined ? { $lte: query.maxYear } : {}),
+      };
+    }
+
     if (search) {
       const safeSearch = this.escapeRegExp(search);
-      queryObject.$or = [{ title: { $regex: safeSearch, $options: "i" } }];
+      queryObject.$or = [
+        { title: { $regex: safeSearch, $options: "i" } },
+        { description: { $regex: safeSearch, $options: "i" } },
+      ];
     }
 
     return queryObject;
@@ -64,4 +103,3 @@ export class ArtworksListService {
     return { count, artworks };
   }
 }
-

@@ -23,8 +23,13 @@ export class CategoriesListService {
   buildQuery(query: CategoriesListQueryDto) {
     const search = query.search?.trim();
     const slug = query.slug;
+    const status = query.status;
 
     const queryObject: QueryFilter<CategoryDocument> = {};
+
+    if (status) {
+      queryObject.status = status;
+    }
 
     if (slug) {
       const slugs = slug
