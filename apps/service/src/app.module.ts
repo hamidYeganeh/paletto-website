@@ -11,6 +11,7 @@ import { MediumsModule } from "./mediums/mediums.module";
 import { StylesModule } from "./styles/styles.module";
 import { OffersModule } from "./offers/offers.module";
 import { CategoriesModule } from "./categories/categories.module";
+import { MediaModule } from "./media/media.module";
 import configs from "./config";
 import envValidationSchema from "./config/env.validation";
 
@@ -41,6 +42,7 @@ import envValidationSchema from "./config/env.validation";
     StylesModule,
     OffersModule,
     CategoriesModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
