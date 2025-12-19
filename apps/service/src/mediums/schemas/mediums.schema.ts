@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { MediumStatus } from "../enums/mediums-status.enum";
 import { HydratedDocument } from "mongoose";
-import { CategoriesStatus } from "../enums/categories-status.enum";
 
-export type CategoryDocument = HydratedDocument<Category>;
+export type MediumDocument = HydratedDocument<Medium>;
 
 @Schema({ _id: true, timestamps: true })
-export class Category {
+export class Medium {
   @Prop({ required: true, index: true })
   title: string;
 
@@ -18,10 +18,10 @@ export class Category {
   @Prop({
     required: true,
     type: String,
-    enum: CategoriesStatus,
-    default: CategoriesStatus.ACTIVE,
+    enum: MediumStatus,
+    default: MediumStatus.ACTIVE,
   })
-  status: CategoriesStatus;
+  status: MediumStatus;
 
   _id: string;
 
@@ -30,4 +30,4 @@ export class Category {
   updatedAt: Date;
 }
 
-export const CategorySchema = SchemaFactory.createForClass(Category);
+export const MediumSchema = SchemaFactory.createForClass(Medium);

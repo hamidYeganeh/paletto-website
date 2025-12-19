@@ -9,19 +9,25 @@ import {
 import { CategoriesListService } from "./services/categories-list.service";
 import { CategoryUpdateDto } from "./dto/categories-update.dto";
 import { CategoriesUpdateService } from "./services/categories-update.service";
+import { CategoriesFindOneService } from "./services/categories-find-one.service";
 
 @Injectable()
 export class CategoriesService {
   constructor(
     private readonly categoriesListService: CategoriesListService,
     private readonly categoriesCreateService: CategoriesCreateService,
-    private readonly categoriesUpdateService: CategoriesUpdateService
+    private readonly categoriesUpdateService: CategoriesUpdateService,
+    private readonly categoriesFindOneService: CategoriesFindOneService
   ) {}
 
   async getCategoriesList(
-  query: CategoriesListQueryDto
+    query: CategoriesListQueryDto
   ): Promise<CategoriesListResponseDto> {
     return this.categoriesListService.execute(query);
+  }
+
+  async getCategoryById(categoryId: string): Promise<CategoryDocument> {
+    return this.categoriesFindOneService.execute(categoryId);
   }
 
   async createCategories(dto: CategoryCreateDto): Promise<CategoryDocument> {

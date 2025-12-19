@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument } from "mongoose";
-import { CategoriesStatus } from "../enums/categories-status.enum";
+import { TechniquesStatus } from "../enums/techniques-status.enum";
 
-export type CategoryDocument = HydratedDocument<Category>;
+export type TechniqueDocument = HydratedDocument<Technique>;
 
 @Schema({ _id: true, timestamps: true })
-export class Category {
+export class Technique {
   @Prop({ required: true, index: true })
   title: string;
 
@@ -18,10 +18,10 @@ export class Category {
   @Prop({
     required: true,
     type: String,
-    enum: CategoriesStatus,
-    default: CategoriesStatus.ACTIVE,
+    enum: TechniquesStatus,
+    default: TechniquesStatus.ACTIVE,
   })
-  status: CategoriesStatus;
+  status: TechniquesStatus;
 
   _id: string;
 
@@ -30,4 +30,5 @@ export class Category {
   updatedAt: Date;
 }
 
-export const CategorySchema = SchemaFactory.createForClass(Category);
+export const TechniqueSchema = SchemaFactory.createForClass(Technique);
+

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Categories Service Demo</title>
+    <title>Techniques Service Demo</title>
     <style>
       :root {
         color-scheme: dark;
@@ -139,27 +139,20 @@
         font-size: 12px;
         color: var(--muted);
       }
-      @media (max-width: 840px) {
-        .grid {
-          grid-template-columns: 1fr;
-        }
-      }
     </style>
   </head>
   <body>
     <div class="container">
       <header>
         <div>
-          <h1>Categories Service Demo</h1>
+          <h1>Techniques Service Demo</h1>
           <div class="hint">
             Targets Nest endpoints:
-            <code>GET /categories/list</code> and
-            <code>POST /categories/create</code> and
-            <code>PATCH /categories/update</code> and
-            <code>GET /categories/:categoryId</code>. Default service URL is
-            <code>http://localhost:5000</code>. If you open this file directly
-            and your browser blocks requests, serve it via a local server (e.g.
-            <code>python3 -m http.server</code>).
+            <code>GET /techniques/list</code>,
+            <code>POST /techniques/create</code>,
+            <code>PATCH /techniques/update</code>,
+            <code>GET /techniques/:techniqueId</code>.
+            Default service URL is <code>http://localhost:5000</code>.
           </div>
         </div>
         <div class="status" id="status"></div>
@@ -180,11 +173,11 @@
 
       <div class="grid">
         <div class="card">
-          <h2>Create Category</h2>
+          <h2>Create Technique</h2>
 
           <label>
             Title (min 4)
-            <input id="createTitle" placeholder="e.g. painting" />
+            <input id="createTitle" placeholder="e.g. impasto" />
           </label>
 
           <label>
@@ -203,20 +196,20 @@
             </label>
             <label>
               Slug (optional)
-              <input id="createSlug" placeholder="e.g. painting" />
+              <input id="createSlug" placeholder="e.g. impasto" />
             </label>
           </div>
 
           <div class="actions">
             <button class="primary" id="createBtn">
-              POST /categories/create
+              POST /techniques/create
             </button>
             <button class="danger" id="clearOutBtn">Clear output</button>
           </div>
         </div>
 
         <div class="card">
-          <h2>List Categories</h2>
+          <h2>List Techniques</h2>
 
           <div class="row">
             <label>
@@ -231,37 +224,37 @@
 
           <label style="margin-top: 10px">
             Search in title (optional)
-            <input id="listSearch" placeholder="e.g. paint" />
+            <input id="listSearch" placeholder="e.g. imp" />
           </label>
 
           <label style="margin-top: 10px">
             Slug (optional)
-            <input id="listSlug" placeholder="e.g. painting or a,b,c" />
+            <input id="listSlug" placeholder="e.g. impasto or a,b,c" />
           </label>
 
           <div class="actions">
-            <button class="primary" id="listBtn">GET /categories/list</button>
+            <button class="primary" id="listBtn">GET /techniques/list</button>
           </div>
         </div>
       </div>
 
       <div class="grid">
         <div class="card">
-          <h2>Update Category</h2>
+          <h2>Update Technique</h2>
 
           <label>
-            Category ID
-            <input id="updateCategoryId" placeholder="Mongo ObjectId" />
+            Technique ID
+            <input id="updateTechniqueId" placeholder="Mongo ObjectId" />
           </label>
 
           <label style="margin-top: 10px">
             Title (optional)
-            <input id="updateTitle" placeholder="e.g. painting" />
+            <input id="updateTitle" placeholder="e.g. impasto" />
           </label>
 
           <label style="margin-top: 10px">
             Slug (optional)
-            <input id="updateSlug" placeholder="e.g. painting" />
+            <input id="updateSlug" placeholder="e.g. impasto" />
           </label>
 
           <div class="row">
@@ -284,21 +277,21 @@
 
           <div class="actions">
             <button class="primary" id="updateBtn">
-              PATCH /categories/update
+              PATCH /techniques/update
             </button>
           </div>
         </div>
 
         <div class="card">
-          <h2>Get Category By ID</h2>
+          <h2>Get Technique By ID</h2>
 
           <label>
-            Category ID
-            <input id="getCategoryId" placeholder="Mongo ObjectId" />
+            Technique ID
+            <input id="getTechniqueId" placeholder="Mongo ObjectId" />
           </label>
 
           <div class="actions">
-            <button class="primary" id="getBtn">GET /categories/:id</button>
+            <button class="primary" id="getBtn">GET /techniques/:id</button>
           </div>
         </div>
       </div>
@@ -326,14 +319,14 @@
       const listSlugEl = $("listSlug");
       const listBtn = $("listBtn");
 
-      const updateCategoryIdEl = $("updateCategoryId");
+      const updateTechniqueIdEl = $("updateTechniqueId");
       const updateTitleEl = $("updateTitle");
       const updateSlugEl = $("updateSlug");
       const updateStatusEl = $("updateStatus");
       const updateDescriptionEl = $("updateDescription");
       const updateBtn = $("updateBtn");
 
-      const getCategoryIdEl = $("getCategoryId");
+      const getTechniqueIdEl = $("getTechniqueId");
       const getBtn = $("getBtn");
 
       function setStatus(text) {
@@ -393,41 +386,44 @@
       }
 
       function saveDefaults() {
-        localStorage.setItem("categories-demo.baseUrl", baseUrlEl.value.trim());
+        localStorage.setItem("techniques-demo.baseUrl", baseUrlEl.value.trim());
         localStorage.setItem(
-          "categories-demo.listPage",
+          "techniques-demo.listPage",
           listPageEl.value.trim()
         );
         localStorage.setItem(
-          "categories-demo.listLimit",
+          "techniques-demo.listLimit",
           listLimitEl.value.trim()
         );
         localStorage.setItem(
-          "categories-demo.listSearch",
+          "techniques-demo.listSearch",
           listSearchEl.value.trim()
         );
         localStorage.setItem(
-          "categories-demo.listSlug",
+          "techniques-demo.listSlug",
           listSlugEl.value.trim()
         );
       }
 
       function loadDefaults() {
         baseUrlEl.value =
-          localStorage.getItem("categories-demo.baseUrl") ||
+          localStorage.getItem("techniques-demo.baseUrl") ||
           "http://localhost:5000";
         listPageEl.value =
-          localStorage.getItem("categories-demo.listPage") || "1";
+          localStorage.getItem("techniques-demo.listPage") || "1";
         listLimitEl.value =
-          localStorage.getItem("categories-demo.listLimit") || "10";
+          localStorage.getItem("techniques-demo.listLimit") || "10";
         listSearchEl.value =
-          localStorage.getItem("categories-demo.listSearch") || "";
+          localStorage.getItem("techniques-demo.listSearch") || "";
         listSlugEl.value =
-          localStorage.getItem("categories-demo.listSlug") || "";
+          localStorage.getItem("techniques-demo.listSlug") || "";
       }
 
       loadDefaults();
-      setOut({ ok: true, hint: "Run the service and try Create/List." });
+      setOut({
+        ok: true,
+        hint: "Run the service and try Create/List/Update/Get.",
+      });
 
       baseUrlEl.addEventListener("change", saveDefaults);
       listPageEl.addEventListener("change", saveDefaults);
@@ -453,7 +449,7 @@
             ...(slug ? { slug } : {}),
           };
 
-          const data = await request("/categories/create", {
+          const data = await request("/techniques/create", {
             method: "POST",
             body: JSON.stringify(payload),
           });
@@ -483,7 +479,7 @@
           if (search) params.set("search", search);
           if (slug) params.set("slug", slug);
 
-          const data = await request(`/categories/list?${params.toString()}`, {
+          const data = await request(`/techniques/list?${params.toString()}`, {
             method: "GET",
           });
           setOut({
@@ -506,21 +502,21 @@
         saveDefaults();
         setLoading(true);
         try {
-          const categoryID = updateCategoryIdEl.value.trim();
+          const techniqueID = updateTechniqueIdEl.value.trim();
           const title = updateTitleEl.value.trim();
           const slug = updateSlugEl.value.trim();
           const status = updateStatusEl.value.trim();
           const description = updateDescriptionEl.value.trim();
 
           const payload = {
-            categoryID,
+            techniqueID,
             ...(title ? { title } : {}),
             ...(slug ? { slug } : {}),
             ...(status ? { status } : {}),
             ...(description ? { description } : {}),
           };
 
-          const data = await request("/categories/update", {
+          const data = await request("/techniques/update", {
             method: "PATCH",
             body: JSON.stringify(payload),
           });
@@ -541,11 +537,11 @@
         saveDefaults();
         setLoading(true);
         try {
-          const categoryId = getCategoryIdEl.value.trim();
-          const data = await request(`/categories/details/${categoryId}`, {
+          const techniqueId = getTechniqueIdEl.value.trim();
+          const data = await request(`/techniques/${techniqueId}`, {
             method: "GET",
           });
-          setOut({ action: "get", categoryId, response: data });
+          setOut({ action: "get", techniqueId, response: data });
         } catch (e) {
           setOut({
             action: "get",
@@ -559,3 +555,4 @@
     </script>
   </body>
 </html>
+

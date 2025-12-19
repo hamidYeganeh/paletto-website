@@ -6,6 +6,7 @@ import { Category, CategorySchema } from "./schemas/categories.schema";
 import { CategoriesCreateService } from "./services/categories-create.service";
 import { CategoriesListService } from "./services/categories-list.service";
 import { CategoriesUpdateService } from "./services/categories-update.service";
+import { CategoriesFindOneService } from "./services/categories-find-one.service";
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CategoriesUpdateService } from "./services/categories-update.service";
     CategoriesListService,
     CategoriesCreateService,
     CategoriesUpdateService,
+    CategoriesFindOneService,
   ],
 })
 export class CategoriesModule {}
