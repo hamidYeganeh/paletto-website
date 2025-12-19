@@ -19,12 +19,12 @@ export default function AuthShell(props: PropsWithChildren) {
       aria-busy={!silkReady}
       className={cn("relative h-dvh overflow-hidden bg-primary-500")}
     >
-      <div
+      {/* <div
         className={cn(
           "w-full h-full absolute top-0 left-0 z-10",
           "bg-linear-180 from-black via-primary-950/80 via-30% to-50% to-transparent"
         )}
-      ></div>
+      ></div> */}
       <div
         className={cn(
           "pointer-events-none absolute inset-0 z-0 opacity-70 mix-blend-overlay transition-opacity duration-200",

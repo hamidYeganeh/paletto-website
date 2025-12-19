@@ -72,7 +72,7 @@ export default function LoginPage() {
           {/* ------------------------------------------------------------------ */}
           {/* Login Form                                                          */}
           {/* ------------------------------------------------------------------ */}
-          <motion.section
+          {/* <motion.section
             layout
             transition={layoutTransition}
             className={cn(
@@ -82,7 +82,6 @@ export default function LoginPage() {
                 : "top-96 items-center"
             )}
           >
-            {/* Title */}
             <motion.p
               initial={{ opacity: 0, y: 100 }}
               animate={
@@ -93,7 +92,6 @@ export default function LoginPage() {
               {t("Auth.Login.form.login-register-label")}
             </motion.p>
 
-            {/* Input */}
             <div className="w-full">
               <Input
                 fullWidth
@@ -108,7 +106,6 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* OR Divider */}
             {!isFocused && (
               <p className="select-none text-lg font-medium text-white">
                 {t("Common.general.or")}
@@ -120,7 +117,7 @@ export default function LoginPage() {
                 ? t("Auth.Login.form.login-submit")
                 : t("Auth.Login.form.login-with-google")}
             </Button>
-          </motion.section>
+          </motion.section> */}
         </main>
       </AnimatePresence>
     </LayoutGroup>

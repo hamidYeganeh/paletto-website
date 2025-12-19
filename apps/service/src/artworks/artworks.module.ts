@@ -1,9 +1,24 @@
 import { Module } from "@nestjs/common";
 import { ArtworksController } from "./artworks.controller";
 import { ArtworksService } from "./artworks.service";
+import { MongooseModule } from "@nestjs/mongoose";
+import { Artwork, ArtworkSchema } from "./schemas/artwork.schema";
+import { ArtworksListService } from "./services/artworks-list.service";
+import { ArtworksCreateService } from "./services/artworks-create.service";
+import { ArtworksUpdateService } from "./services/artworks-update.service";
+import { ArtworksFindOneService } from "./services/artworks-find-one.service";
 
 @Module({
+  imports: [
+    MongooseModule.forFeature([{ name: Artwork.name, schema: ArtworkSchema }]),
+  ],
   controllers: [ArtworksController],
-  providers: [ArtworksService],
+  providers: [
+    ArtworksService,
+    ArtworksListService,
+    ArtworksCreateService,
+    ArtworksUpdateService,
+    ArtworksFindOneService,
+  ],
 })
 export class ArtworksModule {}
