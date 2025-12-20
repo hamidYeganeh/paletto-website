@@ -184,7 +184,7 @@
           />
         </label>
         <div class="hint" style="margin-top: 8px">
-          Use a token for an <code>artist</code> or <code>admin</code> user. Artist tokens can create artworks without setting Artist ID.
+          Use a token for an <code>artist</code> or <code>admin</code> user. Artist tokens can create/update their own artworks without setting Artist ID.
         </div>
       </div>
 
@@ -359,6 +359,11 @@
           </label>
 
           <label style="margin-top: 10px">
+            Materials (comma ids)
+            <input id="listMaterials" placeholder="id1,id2" />
+          </label>
+
+          <label style="margin-top: 10px">
             Tags (comma)
             <input id="listTags" placeholder="abstract,oil" />
           </label>
@@ -391,6 +396,36 @@
             ></textarea>
           </label>
 
+          <label style="margin-top: 10px">
+            Tags (optional, comma)
+            <input id="updateTags" placeholder="abstract,oil" />
+          </label>
+
+          <label style="margin-top: 10px">
+            Images (optional, comma urls)
+            <input id="updateImages" placeholder="https://...,https://..." />
+          </label>
+
+          <label style="margin-top: 10px">
+            Categories (optional, comma ids)
+            <input id="updateCategories" placeholder="id1,id2" />
+          </label>
+
+          <label style="margin-top: 10px">
+            Techniques (optional, comma ids)
+            <input id="updateTechniques" placeholder="id1,id2" />
+          </label>
+
+          <label style="margin-top: 10px">
+            Mediums (optional, comma ids)
+            <input id="updateMediums" placeholder="id1,id2" />
+          </label>
+
+          <label style="margin-top: 10px">
+            Materials (optional, comma ids)
+            <input id="updateMaterials" placeholder="id1,id2" />
+          </label>
+
           <div class="row">
             <label>
               Price (optional)
@@ -405,6 +440,21 @@
                 <option value="deactive">deactive</option>
                 <option value="sold">sold</option>
                 <option value="archived">archived</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="row" style="margin-top: 10px">
+            <label>
+              Currency (optional)
+              <input id="updateCurrency" placeholder="USD" />
+            </label>
+            <label>
+              Negotiable
+              <select id="updateNegotiable">
+                <option value="">(optional)</option>
+                <option value="true">true</option>
+                <option value="false">false</option>
               </select>
             </label>
           </div>
@@ -455,14 +505,23 @@
       const listCategoriesEl = $("listCategories");
       const listTechniquesEl = $("listTechniques");
       const listMediumsEl = $("listMediums");
+      const listMaterialsEl = $("listMaterials");
       const listTagsEl = $("listTags");
       const listBtn = $("listBtn");
 
       const updateArtworkIdEl = $("updateArtworkId");
       const updateTitleEl = $("updateTitle");
       const updateDescriptionEl = $("updateDescription");
+      const updateTagsEl = $("updateTags");
+      const updateImagesEl = $("updateImages");
+      const updateCategoriesEl = $("updateCategories");
+      const updateTechniquesEl = $("updateTechniques");
+      const updateMediumsEl = $("updateMediums");
+      const updateMaterialsEl = $("updateMaterials");
       const updatePriceEl = $("updatePrice");
       const updateStatusEl = $("updateStatus");
+      const updateCurrencyEl = $("updateCurrency");
+      const updateNegotiableEl = $("updateNegotiable");
       const updateBtn = $("updateBtn");
 
       const clearOutBtn = $("clearOutBtn");
@@ -639,6 +698,7 @@
           const categories = listCategoriesEl.value.trim();
           const techniques = listTechniquesEl.value.trim();
           const mediums = listMediumsEl.value.trim();
+          const materials = listMaterialsEl.value.trim();
           const tags = listTagsEl.value.trim();
 
           if (page) params.set("page", page);
@@ -653,6 +713,7 @@
           if (categories) params.set("categories", categories);
           if (techniques) params.set("techniques", techniques);
           if (mediums) params.set("mediums", mediums);
+          if (materials) params.set("materials", materials);
           if (tags) params.set("tags", tags);
 
           const data = await request(`/artworks/list?${params.toString()}`, {
@@ -681,15 +742,31 @@
           const artworkID = updateArtworkIdEl.value.trim();
           const title = updateTitleEl.value.trim();
           const description = updateDescriptionEl.value.trim();
+          const tags = updateTagsEl.value.trim();
+          const images = updateImagesEl.value.trim();
+          const categories = updateCategoriesEl.value.trim();
+          const techniques = updateTechniquesEl.value.trim();
+          const mediums = updateMediumsEl.value.trim();
+          const materials = updateMaterialsEl.value.trim();
           const status = updateStatusEl.value.trim();
           const price = updatePriceEl.value.trim();
+          const currency = updateCurrencyEl.value.trim();
+          const isNegotiable = updateNegotiableEl.value.trim();
 
           const payload = {
             artworkID,
             ...(title ? { title } : {}),
             ...(description ? { description } : {}),
+            ...(splitComma(tags) ? { tags: splitComma(tags) } : {}),
+            ...(splitComma(images) ? { images: splitComma(images) } : {}),
+            ...(splitComma(categories) ? { categories: splitComma(categories) } : {}),
+            ...(splitComma(techniques) ? { techniques: splitComma(techniques) } : {}),
+            ...(splitComma(mediums) ? { mediums: splitComma(mediums) } : {}),
+            ...(splitComma(materials) ? { materials: splitComma(materials) } : {}),
             ...(status ? { status } : {}),
             ...(price ? { price: Number(price) } : {}),
+            ...(currency ? { currency } : {}),
+            ...(isNegotiable ? { isNegotiable: isNegotiable === "true" } : {}),
           };
 
           const token = tokenEl.value.trim();

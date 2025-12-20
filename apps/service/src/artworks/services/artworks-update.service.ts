@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   HttpException,
   Injectable,
@@ -9,6 +10,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
 import { UserRoles } from "src/users/enums/users-roles.enum";
 import { ArtworkUpdateDto } from "../dto/artworks-update.dto";
+import { ArtworksStatus } from "../enums/artworks-status.enum";
 import { Artwork, ArtworkDocument } from "../schemas/artwork.schema";
 
 type Actor = { id: string; role?: string };
@@ -20,17 +22,30 @@ export class ArtworksUpdateService {
     private readonly artworkModel: Model<ArtworkDocument>
   ) {}
 
+  private toObjectIdArray(ids: string[]): Types.ObjectId[] {
+    const invalid = ids.find((id) => !Types.ObjectId.isValid(id));
+    if (invalid) {
+      throw new BadRequestException(`Invalid id: ${invalid}`);
+    }
+    return ids.map((id) => new Types.ObjectId(id));
+  }
+
   async execute(actor: Actor, dto: ArtworkUpdateDto): Promise<ArtworkDocument> {
     if (!Types.ObjectId.isValid(dto.artworkID)) {
       throw new NotFoundException("Invalid artwork id");
     }
 
     const isAdmin = actor.role === UserRoles.ADMIN;
+    const isArtist = actor.role === UserRoles.ARTIST;
+
+    if (!isAdmin && !isArtist) {
+      throw new ForbiddenException("Only artist or admin can update an artwork");
+    }
 
     try {
       const existingArtwork = await this.artworkModel
         .findById(dto.artworkID)
-        .select({ artistID: 1 })
+        .select({ artistID: 1, status: 1 })
         .exec();
 
       if (!existingArtwork) {
@@ -44,11 +59,42 @@ export class ArtworksUpdateService {
       }
 
       const updateFields: Record<string, unknown> = {};
-      Object.entries(dto).forEach(([key, value]) => {
-        if (key !== "artworkID" && value !== undefined) {
-          updateFields[key] = value;
+
+      if (dto.title !== undefined) updateFields.title = dto.title;
+      if (dto.description !== undefined) updateFields.description = dto.description;
+      if (dto.price !== undefined) updateFields.price = dto.price;
+      if (dto.currency !== undefined) updateFields.currency = dto.currency;
+      if (dto.isNegotiable !== undefined) updateFields.isNegotiable = dto.isNegotiable;
+      if (dto.year !== undefined) updateFields.year = dto.year;
+      if (dto.widthCm !== undefined) updateFields.widthCm = dto.widthCm;
+      if (dto.heightCm !== undefined) updateFields.heightCm = dto.heightCm;
+      if (dto.depthCm !== undefined) updateFields.depthCm = dto.depthCm;
+      if (dto.tags !== undefined) updateFields.tags = dto.tags;
+      if (dto.images !== undefined) updateFields.images = dto.images;
+
+      if (dto.categories !== undefined) {
+        updateFields.categories = this.toObjectIdArray(dto.categories);
+      }
+      if (dto.techniques !== undefined) {
+        updateFields.techniques = this.toObjectIdArray(dto.techniques);
+      }
+      if (dto.materials !== undefined) {
+        updateFields.materials = this.toObjectIdArray(dto.materials);
+      }
+      if (dto.mediums !== undefined) {
+        updateFields.mediums = this.toObjectIdArray(dto.mediums);
+      }
+
+      if (dto.status !== undefined) {
+        updateFields.status = dto.status;
+        if (dto.status === ArtworksStatus.SOLD && !existingArtwork.soldAt) {
+          updateFields.soldAt = new Date();
         }
-      });
+      }
+
+      if (Object.keys(updateFields).length === 0) {
+        throw new BadRequestException("No fields to update");
+      }
 
       const updatedArtwork = await this.artworkModel
         .findByIdAndUpdate(
@@ -74,4 +120,3 @@ export class ArtworksUpdateService {
     }
   }
 }
-
