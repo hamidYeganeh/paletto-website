@@ -1,15 +1,17 @@
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import {
-  ArtworksListQueryDto,
-  ArtworksListResponseDto,
-} from "../dto/artworks-list.dto";
-import { Artwork, ArtworkDocument } from "../schemas/artwork.schema";
 import { Model, QueryFilter, Types } from "mongoose";
 import {
   DEFAULT_LIST_LIMIT,
   DEFAULT_LIST_PAGE,
 } from "src/constants/list-pagination.constants";
+import {
+  ArtworksListQueryDto,
+  ArtworksListResponseDto,
+} from "../dto/artworks-list.dto";
+import { Artwork, ArtworkDocument } from "../schemas/artwork.schema";
 
+@Injectable()
 export class ArtworksListService {
   constructor(
     @InjectModel(Artwork.name)
@@ -20,52 +22,104 @@ export class ArtworksListService {
     return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
-  buildQuery(query: ArtworksListQueryDto) {
+  private parseObjectIdList(value?: string): Types.ObjectId[] | undefined {
+    if (!value) return undefined;
+
+    const parts = value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+    if (parts.length === 0) return undefined;
+
+    const invalid = parts.find((item) => !Types.ObjectId.isValid(item));
+    if (invalid) {
+      throw new BadRequestException(`Invalid id: ${invalid}`);
+    }
+
+    return parts.map((item) => new Types.ObjectId(item));
+  }
+
+  buildQuery(query: ArtworksListQueryDto): QueryFilter<ArtworkDocument> {
     const search = query.search?.trim();
+    const status = query.status;
+    const artistID = query.artistID;
+    const artistObjectId =
+      artistID && Types.ObjectId.isValid(artistID)
+        ? new Types.ObjectId(artistID)
+        : undefined;
+
+    const categories = this.parseObjectIdList(query.categories);
+    const techniques = this.parseObjectIdList(query.techniques);
+    const mediums = this.parseObjectIdList(query.mediums);
+    const materials = this.parseObjectIdList(query.materials);
+
+    const tags = query.tags
+      ? query.tags
+          .split(",")
+          .map((value) => value.trim())
+          .filter(Boolean)
+      : undefined;
 
     const queryObject: QueryFilter<ArtworkDocument> = {};
 
-    if (query.artistID) {
-      queryObject.artistID = query.artistID;
+    if (status) {
+      queryObject.status = status;
     }
 
-    if (query.status) {
-      queryObject.status = query.status;
+    if (artistID && !artistObjectId) {
+      throw new BadRequestException("Invalid artist id");
     }
 
-    if (query.categories?.length) {
-      queryObject.categories = {
-        $in: query.categories.map((id) => new Types.ObjectId(id)),
-      };
+    if (artistObjectId) {
+      queryObject.artistID = artistObjectId;
     }
 
-    if (query.techniques?.length) {
-      queryObject.techniques = {
-        $in: query.techniques.map((id) => new Types.ObjectId(id)),
-      };
+    if (categories?.length) {
+      queryObject.categories = { $in: categories };
     }
 
-    if (query.mediums?.length) {
-      queryObject.mediums = {
-        $in: query.mediums.map((id) => new Types.ObjectId(id)),
-      };
+    if (techniques?.length) {
+      queryObject.techniques = { $in: techniques };
     }
 
-    if (query.tags?.length) {
-      queryObject.tags = { $in: query.tags };
+    if (mediums?.length) {
+      queryObject.mediums = { $in: mediums };
     }
 
-    if (query.minPrice !== undefined || query.maxPrice !== undefined) {
+    if (materials?.length) {
+      queryObject.materials = { $in: materials };
+    }
+
+    if (tags?.length) {
+      queryObject.tags = { $in: tags };
+    }
+
+    const minPrice = query.minPrice;
+    const maxPrice = query.maxPrice;
+    if (minPrice !== undefined || maxPrice !== undefined) {
+      if (
+        minPrice !== undefined &&
+        maxPrice !== undefined &&
+        minPrice > maxPrice
+      ) {
+        throw new BadRequestException("minPrice cannot be greater than maxPrice");
+      }
       queryObject.price = {
-        ...(query.minPrice !== undefined ? { $gte: query.minPrice } : {}),
-        ...(query.maxPrice !== undefined ? { $lte: query.maxPrice } : {}),
+        ...(minPrice !== undefined ? { $gte: minPrice } : {}),
+        ...(maxPrice !== undefined ? { $lte: maxPrice } : {}),
       };
     }
 
-    if (query.minYear !== undefined || query.maxYear !== undefined) {
+    const minYear = query.minYear;
+    const maxYear = query.maxYear;
+    if (minYear !== undefined || maxYear !== undefined) {
+      if (minYear !== undefined && maxYear !== undefined && minYear > maxYear) {
+        throw new BadRequestException("minYear cannot be greater than maxYear");
+      }
       queryObject.year = {
-        ...(query.minYear !== undefined ? { $gte: query.minYear } : {}),
-        ...(query.maxYear !== undefined ? { $lte: query.maxYear } : {}),
+        ...(minYear !== undefined ? { $gte: minYear } : {}),
+        ...(maxYear !== undefined ? { $lte: maxYear } : {}),
       };
     }
 
@@ -74,6 +128,7 @@ export class ArtworksListService {
       queryObject.$or = [
         { title: { $regex: safeSearch, $options: "i" } },
         { description: { $regex: safeSearch, $options: "i" } },
+        { tags: { $regex: safeSearch, $options: "i" } },
       ];
     }
 
@@ -97,6 +152,13 @@ export class ArtworksListService {
         .skip(skip)
         .limit(limit)
         .sort({ createdAt: -1 })
+        .populate({
+          path: "artist",
+          select: "name email role status artistProfile createdAt",
+        })
+        .populate({ path: "categories", select: "title slug status" })
+        .populate({ path: "techniques", select: "title slug status" })
+        .populate({ path: "mediums", select: "title slug status" })
         .exec(),
     ]);
 

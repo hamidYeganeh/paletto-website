@@ -157,9 +157,8 @@
           <div class="hint">
             Endpoints:
             <code>GET /artworks/list</code>,
-            <code>POST /artworks/create</code>,
-            <code>PATCH /artworks/update</code>,
-            <code>GET /artworks/details/:artworkID</code>.
+            <code>POST /artworks/create</code> (JWT),
+            <code>PATCH /artworks/update</code> (JWT).
           </div>
         </div>
         <div class="status" id="status"></div>
@@ -176,6 +175,17 @@
             autocomplete="off"
           />
         </label>
+        <label style="margin-top: 10px">
+          Bearer token (required for create/update)
+          <input
+            id="token"
+            placeholder="paste JWT token here"
+            autocomplete="off"
+          />
+        </label>
+        <div class="hint" style="margin-top: 8px">
+          Use a token for an <code>artist</code> or <code>admin</code> user. Artist tokens can create artworks without setting Artist ID.
+        </div>
       </div>
 
       <div class="grid">
@@ -199,6 +209,9 @@
             Artist ID
             <input id="createArtistId" placeholder="Mongo ObjectId" />
           </label>
+          <div class="hint" style="margin-top: 6px">
+            Only needed if your token is <code>admin</code>. For <code>artist</code> tokens leave it empty.
+          </div>
 
           <div class="row">
             <label>
@@ -209,8 +222,11 @@
               Status
               <select id="createStatus">
                 <option value="">(optional)</option>
+                <option value="draft">draft</option>
                 <option value="active">active</option>
                 <option value="deactive">deactive</option>
+                <option value="sold">sold</option>
+                <option value="archived">archived</option>
               </select>
             </label>
           </div>
@@ -223,6 +239,21 @@
             <label>
               Tags (optional, comma)
               <input id="createTags" placeholder="abstract,oil" />
+            </label>
+          </div>
+
+          <div class="row" style="margin-top: 10px">
+            <label>
+              Currency (optional)
+              <input id="createCurrency" placeholder="USD" />
+            </label>
+            <label>
+              Negotiable
+              <select id="createNegotiable">
+                <option value="">(optional)</option>
+                <option value="true">true</option>
+                <option value="false">false</option>
+              </select>
             </label>
           </div>
 
@@ -369,25 +400,17 @@
               Status (optional)
               <select id="updateStatus">
                 <option value="">(optional)</option>
+                <option value="draft">draft</option>
                 <option value="active">active</option>
                 <option value="deactive">deactive</option>
+                <option value="sold">sold</option>
+                <option value="archived">archived</option>
               </select>
             </label>
           </div>
 
           <div class="actions">
             <button class="primary" id="updateBtn">PATCH /artworks/update</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2>Get Artwork By ID</h2>
-          <label>
-            Artwork ID
-            <input id="getArtworkId" placeholder="Mongo ObjectId" />
-          </label>
-          <div class="actions">
-            <button class="primary" id="getBtn">GET /artworks/details/:id</button>
           </div>
         </div>
       </div>
@@ -402,6 +425,7 @@
       const outEl = $("out");
 
       const baseUrlEl = $("baseUrl");
+      const tokenEl = $("token");
 
       const createTitleEl = $("createTitle");
       const createDescriptionEl = $("createDescription");
@@ -410,6 +434,8 @@
       const createStatusEl = $("createStatus");
       const createYearEl = $("createYear");
       const createTagsEl = $("createTags");
+      const createCurrencyEl = $("createCurrency");
+      const createNegotiableEl = $("createNegotiable");
       const createCategoriesEl = $("createCategories");
       const createTechniquesEl = $("createTechniques");
       const createMediumsEl = $("createMediums");
@@ -439,9 +465,6 @@
       const updateStatusEl = $("updateStatus");
       const updateBtn = $("updateBtn");
 
-      const getArtworkIdEl = $("getArtworkId");
-      const getBtn = $("getBtn");
-
       const clearOutBtn = $("clearOutBtn");
 
       function setStatus(text) {
@@ -462,7 +485,6 @@
         createBtn.disabled = isLoading;
         listBtn.disabled = isLoading;
         updateBtn.disabled = isLoading;
-        getBtn.disabled = isLoading;
         setStatus(isLoading ? "Loading..." : "");
       }
 
@@ -511,6 +533,7 @@
 
       function saveDefaults() {
         localStorage.setItem("artworks-demo.baseUrl", baseUrlEl.value.trim());
+        localStorage.setItem("artworks-demo.token", tokenEl.value.trim());
         localStorage.setItem("artworks-demo.listPage", listPageEl.value.trim());
         localStorage.setItem(
           "artworks-demo.listLimit",
@@ -522,6 +545,7 @@
         baseUrlEl.value =
           localStorage.getItem("artworks-demo.baseUrl") ||
           "http://localhost:5000";
+        tokenEl.value = localStorage.getItem("artworks-demo.token") || "";
         listPageEl.value =
           localStorage.getItem("artworks-demo.listPage") || "1";
         listLimitEl.value =
@@ -529,9 +553,10 @@
       }
 
       loadDefaults();
-      setOut({ ok: true, hint: "Create/List/Update/Get artworks." });
+      setOut({ ok: true, hint: "Create/List/Update artworks." });
 
       baseUrlEl.addEventListener("change", saveDefaults);
+      tokenEl.addEventListener("change", saveDefaults);
       listPageEl.addEventListener("change", saveDefaults);
       listLimitEl.addEventListener("change", saveDefaults);
       clearOutBtn.addEventListener("click", () => setOut({}));
@@ -543,8 +568,16 @@
           const payload = {
             title: createTitleEl.value.trim(),
             description: createDescriptionEl.value.trim(),
-            artistID: createArtistIdEl.value.trim(),
+            ...(createArtistIdEl.value.trim()
+              ? { artistID: createArtistIdEl.value.trim() }
+              : {}),
             price: Number(createPriceEl.value.trim() || "0"),
+            ...(createCurrencyEl.value.trim()
+              ? { currency: createCurrencyEl.value.trim() }
+              : {}),
+            ...(createNegotiableEl.value.trim()
+              ? { isNegotiable: createNegotiableEl.value.trim() === "true" }
+              : {}),
             ...(createStatusEl.value.trim()
               ? { status: createStatusEl.value.trim() }
               : {}),
@@ -571,9 +604,11 @@
               : {}),
           };
 
+          const token = tokenEl.value.trim();
           const data = await request("/artworks/create", {
             method: "POST",
             body: JSON.stringify(payload),
+            headers: token ? { authorization: `Bearer ${token}` } : {},
           });
           setOut({ action: "create", payload, response: data });
         } catch (e) {
@@ -657,9 +692,11 @@
             ...(price ? { price: Number(price) } : {}),
           };
 
+          const token = tokenEl.value.trim();
           const data = await request("/artworks/update", {
             method: "PATCH",
             body: JSON.stringify(payload),
+            headers: token ? { authorization: `Bearer ${token}` } : {},
           });
           setOut({ action: "update", payload, response: data });
         } catch (e) {
@@ -673,26 +710,6 @@
         }
       });
 
-      getBtn.addEventListener("click", async () => {
-        saveDefaults();
-        setLoading(true);
-        try {
-          const artworkId = getArtworkIdEl.value.trim();
-          const data = await request(`/artworks/details/${artworkId}`, {
-            method: "GET",
-          });
-          setOut({ action: "get", artworkId, response: data });
-        } catch (e) {
-          setOut({
-            action: "get",
-            error: String(e && e.message ? e.message : e),
-            details: e && e.body ? e.body : undefined,
-          });
-        } finally {
-          setLoading(false);
-        }
-      });
     </script>
   </body>
 </html>
-

@@ -4,6 +4,12 @@ import { ArtworksService } from "./artworks.service";
 
 describe("ArtworksController", () => {
   let controller: ArtworksController;
+  const artworksService = {
+    ping: jest.fn(() => ({ ok: true })),
+    getArtworksList: jest.fn(),
+    createArtwork: jest.fn(),
+    updateArtwork: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -11,7 +17,7 @@ describe("ArtworksController", () => {
       providers: [
         {
           provide: ArtworksService,
-          useValue: {},
+          useValue: artworksService,
         },
       ],
     }).compile();
@@ -21,5 +27,9 @@ describe("ArtworksController", () => {
 
   it("should be defined", () => {
     expect(controller).toBeDefined();
+  });
+
+  it("should ping", () => {
+    expect(controller.ping()).toEqual({ ok: true });
   });
 });

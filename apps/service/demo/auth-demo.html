@@ -147,10 +147,10 @@
           <h1>Auth Service Demo</h1>
           <div class="hint">
             Endpoints:
-            <code>POST /auth/authenticate</code>,
-            <code>POST /auth/otp/request</code>,
-            <code>POST /auth/otp/verify</code>.
+            <code>POST /auth/login</code>.
+            <code>POST /auth/register</code>.
             Default base URL is <code>http://localhost:5000</code>.
+            For now, <code>/auth/register</code> creates an <code>artist</code> user (so you can create artworks).
           </div>
         </div>
         <div class="status" id="status"></div>
@@ -171,7 +171,7 @@
 
       <div class="grid">
         <div class="card">
-          <h2>Password Login/Register</h2>
+          <h2>Login</h2>
 
           <label>
             Email
@@ -189,34 +189,31 @@
           </label>
 
           <div class="actions">
-            <button class="primary" id="pwBtn">POST /auth/authenticate</button>
+            <button class="primary" id="pwBtn">POST /auth/login</button>
             <button class="danger" id="clearOutBtn">Clear output</button>
           </div>
         </div>
 
         <div class="card">
-          <h2>OTP Login/Register</h2>
+          <h2>Register</h2>
 
           <label>
-            Email
-            <input id="otpEmail" placeholder="user@example.com" />
+            Name
+            <input id="regName" placeholder="Your name" />
           </label>
-
-          <div class="actions">
-            <button class="primary" id="otpRequestBtn">
-              POST /auth/otp/request
-            </button>
-          </div>
 
           <label style="margin-top: 10px">
-            Code
-            <input id="otpCode" placeholder="6-digit code" inputmode="numeric" />
+            Email
+            <input id="regEmail" placeholder="user@example.com" />
+          </label>
+
+          <label style="margin-top: 10px">
+            Password
+            <input id="regPassword" placeholder="min 8 chars" type="password" />
           </label>
 
           <div class="actions">
-            <button class="primary" id="otpVerifyBtn">
-              POST /auth/otp/verify
-            </button>
+            <button class="primary" id="regBtn">POST /auth/register</button>
           </div>
         </div>
       </div>
@@ -235,11 +232,10 @@
       const pwPasswordEl = $("pwPassword");
       const tokenBoxEl = $("tokenBox");
       const pwBtn = $("pwBtn");
-
-      const otpEmailEl = $("otpEmail");
-      const otpCodeEl = $("otpCode");
-      const otpRequestBtn = $("otpRequestBtn");
-      const otpVerifyBtn = $("otpVerifyBtn");
+      const regNameEl = $("regName");
+      const regEmailEl = $("regEmail");
+      const regPasswordEl = $("regPassword");
+      const regBtn = $("regBtn");
 
       const clearOutBtn = $("clearOutBtn");
 
@@ -264,8 +260,7 @@
 
       function setLoading(isLoading) {
         pwBtn.disabled = isLoading;
-        otpRequestBtn.disabled = isLoading;
-        otpVerifyBtn.disabled = isLoading;
+        regBtn.disabled = isLoading;
         setStatus(isLoading ? "Loading..." : "");
       }
 
@@ -306,23 +301,26 @@
       function saveDefaults() {
         localStorage.setItem("auth-demo.baseUrl", baseUrlEl.value.trim());
         localStorage.setItem("auth-demo.pwEmail", pwEmailEl.value.trim());
-        localStorage.setItem("auth-demo.otpEmail", otpEmailEl.value.trim());
+        localStorage.setItem("auth-demo.regName", regNameEl.value.trim());
+        localStorage.setItem("auth-demo.regEmail", regEmailEl.value.trim());
       }
 
       function loadDefaults() {
         baseUrlEl.value =
           localStorage.getItem("auth-demo.baseUrl") || "http://localhost:5000";
         pwEmailEl.value = localStorage.getItem("auth-demo.pwEmail") || "";
-        otpEmailEl.value = localStorage.getItem("auth-demo.otpEmail") || "";
+        regNameEl.value = localStorage.getItem("auth-demo.regName") || "";
+        regEmailEl.value = localStorage.getItem("auth-demo.regEmail") || "";
         setToken(localStorage.getItem("auth-demo.token") || "");
       }
 
       loadDefaults();
-      setOut({ ok: true, hint: "Try password auth or OTP flow." });
+      setOut({ ok: true, hint: "Login and copy the token." });
 
       baseUrlEl.addEventListener("change", saveDefaults);
       pwEmailEl.addEventListener("change", saveDefaults);
-      otpEmailEl.addEventListener("change", saveDefaults);
+      regNameEl.addEventListener("change", saveDefaults);
+      regEmailEl.addEventListener("change", saveDefaults);
       clearOutBtn.addEventListener("click", () => setOut({}));
 
       pwBtn.addEventListener("click", async () => {
@@ -333,19 +331,19 @@
             email: pwEmailEl.value.trim(),
             password: pwPasswordEl.value.trim(),
           };
-          const data = await request("/auth/authenticate", {
+          const data = await request("/auth/login", {
             method: "POST",
             body: JSON.stringify(payload),
           });
           if (data && data.token) setToken(data.token);
           setOut({
-            action: "password-auth",
+            action: "login",
             payload: { email: payload.email },
             response: data,
           });
         } catch (e) {
           setOut({
-            action: "password-auth",
+            action: "login",
             error: String(e && e.message ? e.message : e),
             details: e && e.body ? e.body : undefined,
           });
@@ -354,51 +352,28 @@
         }
       });
 
-      otpRequestBtn.addEventListener("click", async () => {
-        saveDefaults();
-        setLoading(true);
-        try {
-          const payload = { email: otpEmailEl.value.trim() };
-          const data = await request("/auth/otp/request", {
-            method: "POST",
-            body: JSON.stringify(payload),
-          });
-          setOut({ action: "otp-request", payload, response: data });
-          if (data && data.debugCode) {
-            otpCodeEl.value = String(data.debugCode);
-          }
-        } catch (e) {
-          setOut({
-            action: "otp-request",
-            error: String(e && e.message ? e.message : e),
-            details: e && e.body ? e.body : undefined,
-          });
-        } finally {
-          setLoading(false);
-        }
-      });
-
-      otpVerifyBtn.addEventListener("click", async () => {
+      regBtn.addEventListener("click", async () => {
         saveDefaults();
         setLoading(true);
         try {
           const payload = {
-            email: otpEmailEl.value.trim(),
-            code: otpCodeEl.value.trim(),
+            name: regNameEl.value.trim(),
+            email: regEmailEl.value.trim(),
+            password: regPasswordEl.value.trim(),
           };
-          const data = await request("/auth/otp/verify", {
+          const data = await request("/auth/register", {
             method: "POST",
             body: JSON.stringify(payload),
           });
           if (data && data.token) setToken(data.token);
           setOut({
-            action: "otp-verify",
-            payload: { email: payload.email },
+            action: "register",
+            payload: { name: payload.name, email: payload.email },
             response: data,
           });
         } catch (e) {
           setOut({
-            action: "otp-verify",
+            action: "register",
             error: String(e && e.message ? e.message : e),
             details: e && e.body ? e.body : undefined,
           });
@@ -409,4 +384,3 @@
     </script>
   </body>
 </html>
-

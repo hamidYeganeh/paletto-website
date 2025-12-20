@@ -1,33 +1,22 @@
 import { Test, TestingModule } from "@nestjs/testing";
+import { ArtworksService } from "./artworks.service";
 import { ArtworksCreateService } from "./services/artworks-create.service";
-import { ArtworksFindOneService } from "./services/artworks-find-one.service";
 import { ArtworksListService } from "./services/artworks-list.service";
 import { ArtworksUpdateService } from "./services/artworks-update.service";
-import { ArtworksService } from "./artworks.service";
 
 describe("ArtworksService", () => {
   let service: ArtworksService;
+  const artworksCreateService = { execute: jest.fn() };
+  const artworksListService = { execute: jest.fn() };
+  const artworksUpdateService = { execute: jest.fn() };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ArtworksService,
-        {
-          provide: ArtworksListService,
-          useValue: {},
-        },
-        {
-          provide: ArtworksCreateService,
-          useValue: {},
-        },
-        {
-          provide: ArtworksUpdateService,
-          useValue: {},
-        },
-        {
-          provide: ArtworksFindOneService,
-          useValue: {},
-        },
+        { provide: ArtworksCreateService, useValue: artworksCreateService },
+        { provide: ArtworksListService, useValue: artworksListService },
+        { provide: ArtworksUpdateService, useValue: artworksUpdateService },
       ],
     }).compile();
 
@@ -36,5 +25,9 @@ describe("ArtworksService", () => {
 
   it("should be defined", () => {
     expect(service).toBeDefined();
+  });
+
+  it("should ping", () => {
+    expect(service.ping()).toEqual({ ok: true });
   });
 });

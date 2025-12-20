@@ -37,83 +37,63 @@ export class ArtworksListQueryDto {
   search?: string;
 
   @IsOptional()
+  @IsEnum(ArtworksStatus)
+  status?: ArtworksStatus;
+
+  @IsOptional()
   @IsMongoId()
   artistID?: string;
 
   @IsOptional()
-  @IsEnum(ArtworksStatus)
-  status?: ArtworksStatus;
+  @IsString()
+  @MaxLength(500)
+  categories?: string;
 
-  @Transform(({ value }) => {
-    if (value === "" || value === undefined || value === null) return undefined;
-    if (Array.isArray(value)) return value;
-    return String(value)
-      .split(",")
-      .map((v) => v.trim())
-      .filter(Boolean);
-  })
   @IsOptional()
-  @IsMongoId({ each: true })
-  categories?: string[];
+  @IsString()
+  @MaxLength(500)
+  techniques?: string;
 
-  @Transform(({ value }) => {
-    if (value === "" || value === undefined || value === null) return undefined;
-    if (Array.isArray(value)) return value;
-    return String(value)
-      .split(",")
-      .map((v) => v.trim())
-      .filter(Boolean);
-  })
   @IsOptional()
-  @IsMongoId({ each: true })
-  techniques?: string[];
+  @IsString()
+  @MaxLength(500)
+  mediums?: string;
 
-  @Transform(({ value }) => {
-    if (value === "" || value === undefined || value === null) return undefined;
-    if (Array.isArray(value)) return value;
-    return String(value)
-      .split(",")
-      .map((v) => v.trim())
-      .filter(Boolean);
-  })
   @IsOptional()
-  @IsMongoId({ each: true })
-  mediums?: string[];
+  @IsString()
+  @MaxLength(500)
+  materials?: string;
 
-  @Transform(({ value }) => {
-    if (value === "" || value === undefined || value === null) return undefined;
-    if (Array.isArray(value)) return value;
-    return String(value)
-      .split(",")
-      .map((v) => v.trim())
-      .filter(Boolean);
-  })
   @IsOptional()
-  @IsString({ each: true })
-  @MaxLength(50, { each: true })
-  tags?: string[];
+  @IsString()
+  @MaxLength(500)
+  tags?: string;
 
+  @Transform(({ value }) => (value === "" ? undefined : value))
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
   @Min(0)
   minPrice?: number;
 
+  @Transform(({ value }) => (value === "" ? undefined : value))
   @Type(() => Number)
   @IsOptional()
   @IsNumber()
   @Min(0)
   maxPrice?: number;
 
+  @Transform(({ value }) => (value === "" ? undefined : value))
   @Type(() => Number)
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   @Min(0)
   minYear?: number;
 
+  @Transform(({ value }) => (value === "" ? undefined : value))
   @Type(() => Number)
   @IsOptional()
-  @IsNumber()
+  @IsInt()
   @Min(0)
   maxYear?: number;
 }

@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   HttpException,
   Injectable,
   InternalServerErrorException,
@@ -6,8 +7,11 @@ import {
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Types } from "mongoose";
+import { UserRoles } from "src/users/enums/users-roles.enum";
 import { ArtworkUpdateDto } from "../dto/artworks-update.dto";
 import { Artwork, ArtworkDocument } from "../schemas/artwork.schema";
+
+type Actor = { id: string; role?: string };
 
 @Injectable()
 export class ArtworksUpdateService {
@@ -16,27 +20,32 @@ export class ArtworksUpdateService {
     private readonly artworkModel: Model<ArtworkDocument>
   ) {}
 
-  async execute(dto: ArtworkUpdateDto): Promise<ArtworkDocument> {
+  async execute(actor: Actor, dto: ArtworkUpdateDto): Promise<ArtworkDocument> {
     if (!Types.ObjectId.isValid(dto.artworkID)) {
       throw new NotFoundException("Invalid artwork id");
     }
 
-    const updateFields: Record<string, unknown> = {};
+    const isAdmin = actor.role === UserRoles.ADMIN;
 
     try {
+      const existingArtwork = await this.artworkModel
+        .findById(dto.artworkID)
+        .select({ artistID: 1 })
+        .exec();
+
+      if (!existingArtwork) {
+        throw new NotFoundException("Artwork not found");
+      }
+
+      const isOwner = String(existingArtwork.artistID) === String(actor.id);
+
+      if (!isAdmin && !isOwner) {
+        throw new ForbiddenException("You can only update your own artwork");
+      }
+
+      const updateFields: Record<string, unknown> = {};
       Object.entries(dto).forEach(([key, value]) => {
         if (key !== "artworkID" && value !== undefined) {
-          if (
-            (key === "categories" ||
-              key === "techniques" ||
-              key === "materials" ||
-              key === "mediums") &&
-            Array.isArray(value)
-          ) {
-            updateFields[key] = value.map((id) => new Types.ObjectId(String(id)));
-            return;
-          }
-
           updateFields[key] = value;
         }
       });
@@ -65,3 +74,4 @@ export class ArtworksUpdateService {
     }
   }
 }
+

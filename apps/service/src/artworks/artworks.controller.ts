@@ -1,20 +1,10 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-} from "@nestjs/common";
+import { Body, Controller, Get, Patch, Post, Query, Req, UseGuards } from "@nestjs/common";
+import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
+import { ArtworksService } from "./artworks.service";
 import { ArtworkCreateDto } from "./dto/artworks-create.dto";
-import {
-  ArtworksListQueryDto,
-  ArtworksListResponseDto,
-} from "./dto/artworks-list.dto";
+import { ArtworksListQueryDto, ArtworksListResponseDto } from "./dto/artworks-list.dto";
 import { ArtworkUpdateDto } from "./dto/artworks-update.dto";
 import { ArtworkDocument } from "./schemas/artwork.schema";
-import { ArtworksService } from "./artworks.service";
 
 @Controller("artworks")
 export class ArtworksController {
@@ -27,20 +17,21 @@ export class ArtworksController {
     return this.artworksService.getArtworksList(query);
   }
 
-  @Get("details/:artworkID")
-  async getArtworkByIdLegacy(
-    @Param("artworkID") artworkId: string
-  ): Promise<ArtworkDocument> {
-    return this.artworksService.getArtworkById(artworkId);
-  }
-
+  @UseGuards(JwtAuthGuard)
   @Post("create")
-  async createArtwork(@Body() dto: ArtworkCreateDto): Promise<ArtworkDocument> {
-    return this.artworksService.createArtwork(dto);
+  async createArtwork(
+    @Req() req,
+    @Body() dto: ArtworkCreateDto
+  ): Promise<ArtworkDocument> {
+    return this.artworksService.createArtwork(req.user, dto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch("update")
-  async updateArtwork(@Body() dto: ArtworkUpdateDto): Promise<ArtworkDocument> {
-    return this.artworksService.updateArtwork(dto);
+  async updateArtwork(
+    @Req() req,
+    @Body() dto: ArtworkUpdateDto
+  ): Promise<ArtworkDocument> {
+    return this.artworksService.updateArtwork(req.user, dto);
   }
 }
