@@ -20,8 +20,8 @@
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
@@ -29,8 +29,8 @@
     "typescript": "5.9.2"
   },
   "dependencies": {
-    "@repo/hooks": "^0.0.0",
-    "@repo/utils": "*",
+    "@repo/hooks": "workspace:*",
+    "@repo/utils": "workspace:*",
     "@hookform/resolvers": "^3.3.4",
     "framer-motion": "^12.23.26",
     "react": "^19.2.0",

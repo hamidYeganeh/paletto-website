@@ -1,5 +1,5 @@
 {
-  "name": "paletto-website",
+  "name": "paletto",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -16,9 +16,5 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "npm@10.2.3",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "packageManager": "pnpm@9.0.0"
 }

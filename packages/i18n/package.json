@@ -36,7 +36,7 @@
     "next-intl": "^4.3.7"
   },
   "devDependencies": {
-    "@repo/typescript-config": "*",
+    "@repo/typescript-config": "workspace:*",
     "typescript": "5.9.2"
   },
   "peerDependencies": {
@@ -44,4 +44,3 @@
     "react": "*"
   }
 }
-
