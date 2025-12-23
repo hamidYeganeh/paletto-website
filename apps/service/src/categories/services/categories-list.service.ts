@@ -20,7 +20,7 @@ export class CategoriesListService {
     return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
-  buildQuery(query: CategoriesListQueryDto) {
+  private buildQuery(query: CategoriesListQueryDto) {
     const search = query.search?.trim();
     const slug = query.slug;
     const status = query.status;

@@ -20,7 +20,7 @@ export class StylesListService {
     return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
-  buildQuery(query: StylesListQueryDto) {
+  private buildQuery(query: StylesListQueryDto) {
     const search = query.search?.trim();
     const slug = query.slug;
     const status = query.status;
@@ -71,4 +71,3 @@ export class StylesListService {
     return { count, styles };
   }
 }
-

@@ -20,7 +20,7 @@ export class TechniquesListService {
     return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
-  buildQuery(query: TechniquesListQueryDto) {
+  private buildQuery(query: TechniquesListQueryDto) {
     const search = query.search?.trim();
     const slug = query.slug;
     const status = query.status;
